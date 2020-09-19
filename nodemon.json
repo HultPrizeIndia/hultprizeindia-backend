@@ -1,0 +1,9 @@
+
+{
+  "env": {
+    "DB_USER":"admin101",
+    "DB_PASS":"ahujacement",
+    "DB_Name":"hultPrizeBackend",
+    "Jwt_Key":"wubbaLubbaDUBDUB*BURPS*"
+  }
+}
