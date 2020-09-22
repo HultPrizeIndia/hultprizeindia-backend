@@ -14,4 +14,4 @@ const tasksSchema = new mongoose.Schema({
 
 tasksSchema.plugin(uniqueValidator);
 
-module.exports = mongoose.model('tasks', tasksSchema);
+module.exports = mongoose.model('Task', tasksSchema);
