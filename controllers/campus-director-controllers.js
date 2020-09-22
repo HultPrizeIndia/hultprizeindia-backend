@@ -4,7 +4,7 @@
 // const smtpTransport = require('nodemailer-smtp-transport');
 // const jwt = require('jsonwebtoken');
 
-const HttpError = require('../models/http-error');
+const HttpError = require('../models/request-error');
 const CampusDirector = require('../models/campus-director');
 
 const getCampusDirectors = async (req, res, next) => {

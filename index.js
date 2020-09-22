@@ -8,10 +8,9 @@ const mongoose = require('mongoose');
 const adminRoutes = require('./routes/admin-routes');
 const campusDirectorRoutes = require('./routes/campus-director-routes');
 
-const HttpError = require('./models/http-error');
+const RequestError = require('./models/request-error');
 
 const app = express();
-
 
 app.use(bodyParser.json());
 
@@ -32,7 +31,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/campusDirector', campusDirectorRoutes);
 
 app.use((req, res, next) => {
-    throw new HttpError('Could not find this route.', 404);
+    throw new RequestError('Could not find this route.', 404);
 });
 
 app.use((error, req, res, next) => {
