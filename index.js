@@ -6,6 +6,9 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 const adminRoutes = require('./routes/admin-routes');
+const taskRoutes = require('./routes/task-routes');
+const liveRoutes = require('./routes/live-routes');
+const universityRoutes = require('./routes/university-routes');
 const campusDirectorRoutes = require('./routes/campus-director-routes');
 
 const RequestError = require('./models/request-error');
@@ -27,8 +30,11 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use('/api/admin', adminRoutes);
-app.use('/api/campusDirector', campusDirectorRoutes);
+app.use('/api/v1/admin', adminRoutes);
+app.use('/api/v1/campusDirector', campusDirectorRoutes);
+app.use('/api/v1/task',taskRoutes);
+app.use('/api/v1/university',universityRoutes);
+app.use('/api/v1/live',liveRoutes);
 
 app.use((req, res, next) => {
     throw new RequestError('Could not find this route.', 404);

@@ -1,12 +1,10 @@
-const {Router} = require('express');
+const express = require('express');
 // const {check} = require('express-validator');
 
 const adminController = require('../controllers/admin-controllers');
-// const fileUpload = require('../middleware/file-upload');
-// const checkAuth = require('../middleware/check-auth');
+const checkAuth = require('../middleware/check-auth');
 
-const router = new Router();
-
+const router = new express.Router();
 
 router.get('/', adminController.getAdmins);
 

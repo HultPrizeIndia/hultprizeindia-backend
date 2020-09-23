@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
 
-const tasksSchema = new mongoose.Schema({
+const taskSchema = new mongoose.Schema({
     name: {type: String, required: true},
     description: {type: String, required: true},
     status: {type: Number},
@@ -12,6 +12,6 @@ const tasksSchema = new mongoose.Schema({
     deadline:  {type: Date, required: true}
 });
 
-tasksSchema.plugin(uniqueValidator);
+taskSchema.plugin(uniqueValidator);
 
-module.exports = mongoose.model('Task', tasksSchema);
+module.exports = mongoose.model('Task', taskSchema);
