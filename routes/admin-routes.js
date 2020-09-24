@@ -1,5 +1,5 @@
 const express = require('express');
-// const {check} = require('express-validator');
+const {check} = require('express-validator');
 
 const adminController = require('../controllers/admin-controllers');
 const checkAuth = require('../middleware/check-auth');
@@ -9,6 +9,22 @@ const router = new express.Router();
 router.get('/', adminController.getAdmins);
 
 router.get('/:adminId', adminController.getAdminById);
+
+router.post('/signup', [
+    check('firstName')
+        .not()
+        .isEmpty(),
+    check('email')
+        .normalizeEmail()
+        .isEmail(),
+    check('password').isLength({min: 6}),
+    check('mobile').not().isEmpty(),
+    ], adminController.signUp);
+
+
+router.use(checkAuth);
+
+
 //
 // router.post(
 //     '/signup',

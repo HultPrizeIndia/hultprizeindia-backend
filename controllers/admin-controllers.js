@@ -1,11 +1,8 @@
-// const {validationResult} = require('express-validator');
-// const bcrypt = require('bcryptjs');
-// const mailer = require('nodemailer');
-// const smtpTransport = require('nodemailer-smtp-transport');
-// const jwt = require('jsonwebtoken');
+
 
 const HttpError = require('../models/request-error');
 const Admin = require('../models/admin');
+const authController = require('../controllers/auth-controller')
 
 const getAdmins = async (req, res, next) => {
     let admins;
@@ -41,6 +38,9 @@ const getAdminById = async (req, res, next) => {
     });
 };
 
+const signUp = async (req, res, next) => {
+    return authController.signUp(req, res,next, Admin);
+}
 // const forgotPassword = async (req, res, next) => {
 //     const email = req.params.email;
 //     let password = Math.random().toString().substring(0, 3) + Math.random().toString().slice(0, 3) + 'win';
@@ -424,7 +424,7 @@ const getAdminById = async (req, res, next) => {
 
 exports.getAdmins = getAdmins;
 // exports.editUser = editUser;
-// exports.signup = signUp;
+exports.signUp = signUp;
 // exports.login = login;
 // exports.forgotPassword = forgotPassword;
 // exports.changePassword = changePassword;

@@ -15,6 +15,8 @@ const RequestError = require('./models/request-error');
 
 const app = express();
 
+const PORT = process.env.PORT || 5000;
+
 app.use(bodyParser.json());
 
 app.use('/uploads/images', express.static(path.join('uploads', 'images')));
@@ -62,8 +64,8 @@ mongoose
         }
     )
     .then(() => {
-        app.listen(process.env.PORT || 5000, () => {
-            console.log("Server Started");
+        app.listen(PORT, () => {
+            console.log(`DB connected at : mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0-dhan1.gcp.mongodb.net/${process.env.DB_Name} on port: ${PORT}`);
         });
     })
     .catch(err => {
