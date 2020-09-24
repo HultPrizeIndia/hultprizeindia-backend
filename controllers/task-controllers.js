@@ -11,10 +11,7 @@ const getAllTasks = async (req, res, next) => {
     try {
         tasks = await Task.find({});
     } catch (err) {
-        const error = new RequestError(
-            'Fetching tasks failed, please try again later.',
-            500
-        );
+        const error = new RequestError('Fetching tasks failed, please try again later.', 500, err);
         return next(error);
     }
     await res.json({tasks: tasks.map(task => task.toObject({getters: true}))});
@@ -35,35 +32,29 @@ const deleteTaskById = async(req,res,next) => {
     const userId = req.userData.userId;
     const taskId = req.body.taskId;
     let existingAdmin;
-    try{
+    try {
         existingAdmin = await Admin.findById(userId);
-    }catch (err){
-        const error = new RequestError("Finding admin failed",500);
+    } catch (err){
+        const error = new RequestError("Finding admin failed", 500, err);
         return next(error);
     }
-    if(existingAdmin){
-        try{
+    if (existingAdmin){
+        try {
             await  Task.findByIdAndRemove(taskId);
-        }catch(err){
-            const error = new RequestError(
-                'Deleting task failed, please try again later.',
-                500
-            );
+        } catch (err) {
+            const error = new RequestError('Deleting task failed, please try again later.', 500, err);
             return next(error);
         }
-    }else{
-        const error = new RequestError("Not Authorized to delete task",500);
+    } else {
+        const error = new RequestError("Not Authorized to delete task", 500);
         return next(error);
     }
 };
 const deleteTasks = async(req,res, next) => {
-    try{
+    try {
         await  Task.remove({});
-    }catch(err){
-        const error = new RequestError(
-            'Deleting tasks failed, please try again later.',
-            500
-        );
+    } catch (err) {
+        const error = new RequestError('Deleting tasks failed, please try again later.', 500, err);
         return next(error);
     }
 };

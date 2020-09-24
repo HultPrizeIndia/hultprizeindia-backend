@@ -4,7 +4,7 @@
 // const smtpTransport = require('nodemailer-smtp-transport');
 // const jwt = require('jsonwebtoken');
 
-const HttpError = require('../models/request-error');
+const RequestError = require('../models/request-error');
 const University = require('../models/university');
 
 // const getTasks = async (req, res, next) => {

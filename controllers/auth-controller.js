@@ -10,15 +10,12 @@ const Admin = require("../models/admin");
 const CD = require("../models/campus-director");
 
 const signUp = async (req, res, next, dbType) => {
-    if(dbType == Admin) {
+    if (dbType == Admin) {
         console.log("DBTYPE IS ADMIN");
-    } else if(dbType == CD) {
+    } else if (dbType == CD) {
         const uni = req.body.uni;
-        if(!uni) {
-            const error = new RequestError(
-                err.message,
-                500
-            );
+        if (!uni) {
+            const error = new RequestError(err.message, 500);
             return next(error);
         }
     }
@@ -38,20 +35,13 @@ const signUp = async (req, res, next, dbType) => {
     try {
         existingUser = await dbType.findOne({email: email});
     } catch (err) {
-        console.log(err);
-        const error = new RequestError(
-            err.message,
-            500
-        );
+        const error = new RequestError("Error quering database", 500, err);
 
         return next(error);
     }
 
     if (existingUser) {
-        const error = new RequestError(
-            'User exists already, please login instead.',
-            422
-        );
+        const error = new RequestError('User exists already, please login instead.',422);
         return next(error);
     }
 
@@ -59,11 +49,7 @@ const signUp = async (req, res, next, dbType) => {
     try {
         hashedPassword = await bcrypt.hash(password, 12);
     } catch (err) {
-        console.log(err);
-        const error = new RequestError(
-            'Could not create user, please try again.',
-            500
-        );
+        const error = new RequestError('Could not create user, please try again.', 500, err);
         return next(error);
     }
     const date = Date().toLocaleString();
@@ -78,7 +64,7 @@ const signUp = async (req, res, next, dbType) => {
     //     }
     // } catch (err) {
     //     console.log(err);
-    //     const error = new RequestError(err.message, err.code);
+    //     const error = new RequestError(err.message, err.code, err);
     //     return next(error);
     // }
 
@@ -95,11 +81,7 @@ const signUp = async (req, res, next, dbType) => {
     try {
         await createdUser.save();
     } catch (err) {
-        console.log(err);
-        const error = new RequestError(
-            err.message,
-            500
-        );
+        const error = new RequestError("Error creating user", 500, err);
         return next(error);
     }
 
@@ -110,11 +92,7 @@ const signUp = async (req, res, next, dbType) => {
             process.env.Jwt_Key,
         );
     } catch (err) {
-        console.log(err);
-        const error = new RequestError(
-            'Signing up failed, please try again later.',
-            500
-        );
+        const error = new RequestError('Signing up failed, please try again later.', 500, err);
         return next(error);
     }
 

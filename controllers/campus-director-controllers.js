@@ -4,7 +4,7 @@
 // const smtpTransport = require('nodemailer-smtp-transport');
 // const jwt = require('jsonwebtoken');
 
-const HttpError = require('../models/request-error');
+const RequestError = require('../models/request-error');
 const CampusDirector = require('../models/campus-director');
 
 const getCampusDirectors = async (req, res, next) => {
@@ -12,10 +12,7 @@ const getCampusDirectors = async (req, res, next) => {
     try {
         campusDirectors = await CampusDirector.find({}, '-password');
     } catch (err) {
-        const error = new HttpError(
-            'Fetching campus directors failed, please try again later.',
-            500
-        );
+        const error = new RequestError('Fetching campus directors failed, please try again later.', 500, err);
         return next(error);
     }
     await res.json({campusDirectors: campusDirectors.map(campusDirector => campusDirector.toObject({getters: true}))});

@@ -1,6 +1,6 @@
 
 
-const HttpError = require('../models/request-error');
+const RequestError = require('../models/request-error');
 const Admin = require('../models/admin');
 const authController = require('../controllers/auth-controller')
 
@@ -9,10 +9,7 @@ const getAdmins = async (req, res, next) => {
     try {
         admins = await Admin.find({}, '-password');
     } catch (err) {
-        const error = new HttpError(
-            'Fetching users failed, please try again later.',
-            500
-        );
+        const error = new RequestError('Fetching users failed, please try again later.', 500, err);
         return next(error);
     }
     await res.json({admins: admins.map(admin => admin.toObject({getters: true}))});
@@ -24,11 +21,11 @@ const getAdminById = async (req, res, next) => {
     try {
         admin = await Admin.findById(adminId)
     } catch (err) {
-        const error = new HttpError("Something went wrong can't get admin.", 500);
+        const error = new RequestError("Something went wrong can't get admin.", 500, err);
         return next(error);
     }
     if (!admin) {
-        const error = new HttpError("Can't find admin for provided id", 404);
+        const error = new RequestError("Can't find admin for provided id", 404);
         return next(error);
     }
     res.status(200).json({

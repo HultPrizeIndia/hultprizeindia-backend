@@ -1,5 +1,8 @@
 {
   "env": {
+    "APP_NAME": "Hult Prize India Server",
+    "SV_PORT": 5000,
+    "DB_URL": "mongodb+srv://admin101:ahujacement@cluster0-dhan1.gcp.mongodb.net/hultPrizeBackend",
     "DB_USER": "admin101",
     "DB_PASS": "ahujacement",
     "DB_Name": "hultPrizeBackend",
