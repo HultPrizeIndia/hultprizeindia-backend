@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken');
-
+const Blacklist = require('../models/blacklist');
 const HttpError = require('../models/request-error');
 
-module.exports = (req, res, next) => {
+module.exports = async (req, res, next) => {
   if (req.method === 'OPTIONS') {
     return next();
   }
@@ -11,9 +11,17 @@ module.exports = (req, res, next) => {
     if (!token) {
       throw new Error('Authentication failed!');
     }
+    let tokenBlacklisted = await Blacklist.findOne({
+      "token": token
+    }) != null;
+    if(!tokenBlacklisted){
     const decodedToken = jwt.verify(token, process.env.Jwt_Key);
     req.userData = { userId: decodedToken.userId };
-    next();
+    next();}
+    else {
+      const error = new HttpError('Authentication failed!', 403);
+      return next(error);
+    }
   } catch (err) {
     const error = new HttpError('Authentication failed!', 403);
     return next(error);
