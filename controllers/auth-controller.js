@@ -86,9 +86,10 @@ const signUp = async (req, res, next, dbType) => {
     }
 
     let token;
+    const expiryDate = Math.round((new Date() / 1000) + 172800);
     try {
         token = jwt.sign(
-            {userId: createdUser.id, email: createdUser.email},
+            {userId: createdUser.id, email: createdUser.email, expiry: expiryDate},
             process.env.Jwt_Key,
         );
     } catch (err) {
