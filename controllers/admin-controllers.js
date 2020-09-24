@@ -12,7 +12,7 @@ const getAdmins = async (req, res, next) => {
         const error = new RequestError('Fetching users failed, please try again later.', 500, err);
         return next(error);
     }
-    await res.json({admins: admins.map(admin => admin.toObject({getters: true}))});
+    await res.json({"status":"success", admins: admins.map(admin => admin.toObject({getters: true}))});
 };
 
 const getAdminById = async (req, res, next) => {
@@ -29,6 +29,7 @@ const getAdminById = async (req, res, next) => {
         return next(error);
     }
     res.status(200).json({
+        "status":"success",
         admin: admin.toObject(
             {getters: true}
         )

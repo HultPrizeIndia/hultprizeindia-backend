@@ -15,7 +15,7 @@ const getCampusDirectors = async (req, res, next) => {
         const error = new RequestError('Fetching campus directors failed, please try again later.', 500, err);
         return next(error);
     }
-    await res.json({campusDirectors: campusDirectors.map(campusDirector => campusDirector.toObject({getters: true}))});
+    await res.json({"status":"success",campusDirectors: campusDirectors.map(campusDirector => campusDirector.toObject({getters: true}))});
 };
 
 

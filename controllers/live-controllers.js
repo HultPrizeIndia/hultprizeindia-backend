@@ -19,7 +19,7 @@ const Live = require('../models/live');
 //         );
 //         return next(error);
 //     }
-//     await res.json({campusDirectors: campusDirectors.map(campusDirector => campusDirector.toObject({getters: true}))});
+//     await res.json({"status":"success",campusDirectors: campusDirectors.map(campusDirector => campusDirector.toObject({getters: true}))});
 // };
 
 

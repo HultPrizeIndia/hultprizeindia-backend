@@ -14,7 +14,7 @@ const getAllTasks = async (req, res, next) => {
         const error = new RequestError('Fetching tasks failed, please try again later.', 500, err);
         return next(error);
     }
-    await res.json({tasks: tasks.map(task => task.toObject({getters: true}))});
+    await res.json({"status":"success",tasks: tasks.map(task => task.toObject({getters: true}))});
 };
 
 const getTaskById = async (req,res,next) => {

@@ -98,7 +98,7 @@ const signUp = async (req, res, next, dbType) => {
 
     await res
         .status(201)
-        .json({user: createdUser, email: createdUser.email, token: token});
+        .json({"status":"success",user: createdUser, email: createdUser.email, token: token});
 };
 
 exports.signUp = signUp;
