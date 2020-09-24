@@ -28,7 +28,13 @@ router.post('/create', [
     check('priority').not().isEmpty(),
 ], taskController.createTask);
 
-router.patch('/update/:taskId', taskController.updateTask);
+router.patch('/update/:taskId', [
+    // check that only admin id is allowed to CUD.
+    check('deadline').not().isEmpty(),
+    check('name').not().isEmpty(),
+    check('description').not().isEmpty(),
+    check('priority').not().isEmpty(),
+],taskController.updateTask);
 router.delete('/delete/:taskId',taskController.deleteTaskById);
 router.delete('/deleteAll', taskController.deleteTasks);
 

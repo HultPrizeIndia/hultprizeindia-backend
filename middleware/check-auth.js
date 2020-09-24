@@ -18,14 +18,6 @@ module.exports = async (req, res, next) => {
     if(!tokenBlacklisted) {
       const decodedToken = jwt.verify(token, process.env.Jwt_Key);
 
-
-      const currentDate = Math.round(new Date() / 1000);
-      if (currentDate > decodedToken.expiry) {
-        // Token is expired
-        const error = new RequestError('Expired token!', 403);
-        return next(error);
-      }
-
       req.userData = { userId: decodedToken.userId };
       next();
       
@@ -34,7 +26,7 @@ module.exports = async (req, res, next) => {
       return next(error);
     }
   } catch (err) {
-      const error = new RequestError('Authentication failed!', 403, err);
+      const error = new RequestError('Token Expired!!', 403);
     return next(error);
   }
 };

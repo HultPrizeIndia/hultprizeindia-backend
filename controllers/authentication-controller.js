@@ -86,11 +86,12 @@ const signUp = async (req, res, next, dbType) => {
     }
 
     let token;
-    const expiryDate = Math.round((new Date() / 1000) + 172800);
     try {
         token = jwt.sign(
-            {userId: createdUser.id, email: createdUser.email, expiry: expiryDate},
-            process.env.Jwt_Key,
+            {userId: createdUser.id, email: createdUser.email},
+            process.env.Jwt_Key,{
+                expiresIn: '2d' // expires in 2d
+            }
         );
     } catch (err) {
         const error = new RequestError('Signing up failed, please try again later.', 500, err);
