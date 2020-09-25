@@ -25,7 +25,7 @@ module.exports = async (req, res, next) => {
       return next(error);
     }
   } catch (err) {
-    const error = new HttpError(err.message + " token error", 403);
+    const error = new RequestError("Token not sent!", 403);
     return next(error);
   }
 };
