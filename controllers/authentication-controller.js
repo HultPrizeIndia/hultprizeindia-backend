@@ -1,7 +1,7 @@
 
 const bcrypt = require("bcryptjs");
 const jwt = require('jsonwebtoken');
-const mailer = require('nodemailer');
+// const mailer = require('nodemailer');
 
 const RequestError = require("../models/request-error");
 
@@ -10,16 +10,6 @@ const Admin = require("../models/admin");
 const CD = require("../models/campus-director");
 
 const signUp = async (req, res, next, dbType) => {
-    if (dbType == Admin) {
-        console.log("DBTYPE IS ADMIN");
-    } else if (dbType == CD) {
-        const uni = req.body.uni;
-        if (!uni) {
-            const error = new RequestError(err.message, 500);
-            return next(error);
-        }
-    }
-
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -30,13 +20,12 @@ const signUp = async (req, res, next, dbType) => {
 
 
 
-    const {firstName, lastName, email, password, mobile} = req.body;
+    const {firstName, lastName, email, password, mobile,university} = req.body;
     let existingUser;
     try {
         existingUser = await dbType.findOne({email: email});
     } catch (err) {
-        const error = new RequestError("Error quering database", 500, err);
-
+        const error = new RequestError("Error querying database", 500, err);
         return next(error);
     }
 
@@ -75,6 +64,7 @@ const signUp = async (req, res, next, dbType) => {
         // image: 'https://win75.herokuapp.com/' + filePath,
         password: hashedPassword,
         mobile,
+        university,
         joinDate: date,
     });
 

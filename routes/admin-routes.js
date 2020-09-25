@@ -17,9 +17,10 @@ router.post('/signup', [
     check('email')
         .normalizeEmail()
         .isEmail(),
+    check('university').not().isEmpty(),
     check('password').isLength({min: 6}),
     check('mobile').not().isEmpty(),
-    ], adminController.signUp);
+], adminController.signUp);
 
 
 router.use(checkAuth);

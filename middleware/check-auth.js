@@ -17,7 +17,6 @@ module.exports = async (req, res, next) => {
 
     if(!tokenBlacklisted) {
       const decodedToken = jwt.verify(token, process.env.Jwt_Key);
-
       req.userData = { userId: decodedToken.userId };
       next();
       
@@ -26,7 +25,7 @@ module.exports = async (req, res, next) => {
       return next(error);
     }
   } catch (err) {
-      const error = new RequestError('Token Expired!!', 403);
+    const error = new HttpError(err.message + " token error", 403);
     return next(error);
   }
 };

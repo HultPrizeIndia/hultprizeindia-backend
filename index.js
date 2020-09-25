@@ -44,7 +44,6 @@ app.use('/api/v1/task',taskRoutes);
 app.use('/api/v1/university',universityRoutes);
 app.use('/api/v1/live',liveRoutes);
 
-
 // Unsupported Routes.
 app.use((req, res, next) => {
     throw new RequestError('Could not find this route.', 404);
@@ -67,10 +66,13 @@ app.use((error, req, res, next) => {
     });
 });
 
+
+
 mongoose.connect(`${process.env.DB_URL}`, {
     useNewUrlParser: true, 
     useUnifiedTopology: true, 
-    useCreateIndex: true
+    useCreateIndex: true,
+ useFindAndModify: false
 }).then(() => {
         app.listen(process.env.SV_PORT, () => {
             console.log(`\n${process.env.APP_NAME} Started\nListening on port: ${process.env.SV_PORT}`);

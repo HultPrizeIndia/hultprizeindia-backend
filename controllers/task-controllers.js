@@ -39,29 +39,13 @@ const createTask = async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return next(
-            new RequestError('Invalid Inputs passed', 422,errors)
+            new RequestError('Invalid Inputs passed', 422, errors)
         );
     }
-    const adminId = req.userData.userId;
-
-    // assignedBy will come from jwt payload
-    // givenDate is server generated
 
     const {name, description, status, priority, deadline} = req.body;
-    let existingAdmin;
-    try {
-        existingAdmin = await Admin.findById(adminId);
-    } catch (err) {
-        const error = new RequestError("Error querying database", 500, err);
 
-        return next(error);
-    }
-
-    if (!existingAdmin) {
-        const error = new RequestError('Only admin can create tasks.', 422);
-        return next(error);
-    }
-
+    const adminId = req.userData.userId;
     const date = Date().toLocaleString();
 
     const createdTask = new Task({
@@ -82,8 +66,9 @@ const createTask = async (req, res, next) => {
     }
     await res
         .status(201)
-        .json({task: createdTask,});
+        .json({"status":"success",task: createdTask});
 };
+
 const updateTask = async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -92,38 +77,22 @@ const updateTask = async (req, res, next) => {
         );
     }
     const taskId = req.params.taskId;
-    const adminId = req.userData.userId;
-
 
     // even if some fields are changed, front end shall pass full object
     const {name, description, status, priority, deadline} = req.body;
 
-    let existingAdmin;
+    const updatableFields = {
+        name, description, status, priority, deadline
+    };
     try {
-        existingAdmin = await Admin.findById(adminId);
-    } catch (err) {
-        const error = new RequestError("Error querying database", 500, err);
-
-        return next(error);
-    }
-
-    if (!existingAdmin) {
-        const error = new RequestError('Only admin can create tasks.', 422);
-        return next(error);
-    }
-    let existingTask;
-    //Todo: check update
-    try {
-        existingTask = await Task.findByIdAndUpdate(taskId,{
-            name, description, status, priority, deadline,
-        });
+        await Task.findByIdAndUpdate(taskId, updatableFields);
     } catch (err) {
         const error = new RequestError("Error fetching task", 500, err);
         return next(error);
     }
     await res
         .status(201)
-        .json({task: existingTask,});
+        .json({"status": "success", updatedFields: updatableFields,});
 };
 
 const deleteTaskById = async (req, res, next) => {
@@ -147,7 +116,7 @@ const deleteTaskById = async (req, res, next) => {
         const error = new RequestError("Not Authorized to delete task", 500);
         return next(error);
     }
-    res.json({status:"Success",message:"Task deleted"});
+    res.json({"status": "Success", message: "Task deleted"});
 };
 
 const deleteTasks = async (req, res, next) => {
@@ -157,7 +126,7 @@ const deleteTasks = async (req, res, next) => {
         const error = new RequestError('Deleting tasks failed, please try again later.', 500, err);
         return next(error);
     }
-    res.json({status:"Success",message:"All tasks deleted"});
+    res.json({"status": "Success", message: "All tasks deleted"});
 };
 
 exports.getAllTasks = getAllTasks;
