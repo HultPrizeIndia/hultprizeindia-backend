@@ -23,7 +23,6 @@ router.post('/signup', [
 ], adminController.signUp);
 
 
-router.use(checkAuth);
 
 
 //
@@ -45,7 +44,7 @@ router.use(checkAuth);
 //
 // router.post('/login', adminController.login);
 // router.get('/forgotPassword/:email', adminController.forgotPassword);
-// router.use(checkAuth);
+// // router.use(checkAuth); DO NOT USE THIS.
 // router.patch('/changePassword', [check('newPassword').isLength({min: 6})], adminController.changePassword);
 // router.patch('/edit', fileUpload.single('image'),
 //     [

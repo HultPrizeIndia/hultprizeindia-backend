@@ -8,16 +8,8 @@ const checkAdmin = require('../middleware/check-admin');
 const router = new express.Router();
 
 router.get('/all', taskController.getAllTasks);
-router.get('/:taskId', taskController.getTaskById);
+router.get('/get/:taskId', taskController.getTaskById);
 router.get('/countStatus/:taskId', taskController.getTaskCountStatus);
-
-// from this point token is required
-//
-router.use(checkAuth);
-
-// check that only admin id is allowed to CUD.
-
-router.use(checkAdmin);
 
 // here assignedBy is taken by userdata.
 // here givenDate will be server gen.
@@ -28,7 +20,7 @@ router.post('/create', [
     check('name').not().isEmpty(),
     check('description').not().isEmpty(),
     check('priority').not().isEmpty(),
-], taskController.createTask);
+],checkAuth, checkAdmin, taskController.createTask);
 
 router.patch('/update/:taskId', [
     check('status').not().isEmpty(),
@@ -36,11 +28,11 @@ router.patch('/update/:taskId', [
     check('name').not().isEmpty(),
     check('description').not().isEmpty(),
     check('priority').not().isEmpty(),
-], taskController.updateTask);
+],checkAuth, checkAdmin, taskController.updateTask);
 
-router.delete('/delete/:taskId', taskController.deleteTaskById);
+router.delete('/delete/:taskId',checkAuth, checkAdmin, taskController.deleteTaskById);
 
-router.delete('/deleteAll', taskController.deleteTasks);
+router.delete('/deleteAll',checkAuth, checkAdmin, taskController.deleteTasks);
 
 //Todo: send mail to cd for incomplete task
 module.exports = router;
