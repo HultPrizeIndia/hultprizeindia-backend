@@ -9,7 +9,7 @@ module.exports = async (req, res, next) => {
   try {
     const token = req.headers.authorization.split(' ')[1]; // Authorization: 'Bearer TOKEN'
     if (!token) {
-      throw new Error('Authentication failed! token does not exist');
+      throw new RequestError('Authentication failed! token does not exist',404);
     }
     let tokenBlacklisted = await Blacklist.findOne({
       "token": token
