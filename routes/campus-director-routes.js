@@ -3,6 +3,7 @@ const {check} = require('express-validator');
 
 const campusDirectorController = require('../controllers/campus-director-controllers');
 const checkAuth = require('../middleware/check-auth');
+const checkAdmin = require('../middleware/check-admin');
 
 const router = new express.Router();
 
@@ -24,6 +25,7 @@ router.post('/signup', [
     check('mobile').not().isEmpty(),
 ], campusDirectorController.signUp);
 
+router.post('/delete', checkAuth, checkAdmin, campusDirectorController.deleteCD);
 
 // router.get('/:adminId', campusDirectorController.);
 //
@@ -41,5 +43,10 @@ router.post('/signup', [
 //             .isEmail(),
 //         check('mobile').not().isEmpty()
 //     ], adminController.editUser);
+
+// Update CD:               /api/v1/cd/update
+
+// Change pass:             /api/v1/cd/changePass
+// # Forget pass:           /api/v1/cd/forgetPass
 
 module.exports = router;

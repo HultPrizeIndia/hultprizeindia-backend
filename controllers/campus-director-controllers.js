@@ -108,8 +108,9 @@ const login = async (req, res, next) => {
     }
 
     await res.json({
-        user: existingUser,
-        token: token
+        "status": "success",
+        "user": existingUser,
+        "token": token
     });
 }
 
@@ -117,8 +118,38 @@ const signUp = async (req, res, next) => {
     return authController.signUp(req, res,next, CampusDirector);
 }
 
+const deleteCD = async (req, res, next) => {
+    const {email} = req.body;
+    let campusDirector;
+    try {
+        campusDirector = await CampusDirector.findOne({email: email}, "-password");
+    } catch (err) {
+        next(new RequestError("Error finding campusDirector by Email", 500, err));
+    }
+
+    if(!campusDirector) {
+        next(new RequestError("CampusDirector does not exist!", 500, err));
+    }
+
+    try {
+        const sess = await mongoose.startSession();
+        sess.startTransaction();
+        await campusDirector.remove();
+        await sess.commitTransaction();
+    } catch (err) {
+        next(new RequestError("Error removing CD", 500, err));
+    }
+
+    await res.json({
+        "status": "success",
+        "campusdirector": campusDirector
+    })
+
+}
+
 
 exports.getCampusDirectors = getCampusDirectors;
 exports.signUp = signUp;
 exports.login = login;
 exports.getCampusDirectorsByStatus = getCampusDirectorsByStatus;
+exports.deleteCD = deleteCD;
