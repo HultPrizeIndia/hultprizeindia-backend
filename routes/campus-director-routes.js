@@ -7,7 +7,10 @@ const checkAuth = require('../middleware/check-auth');
 const router = new express.Router();
 
 
-router.get('/', campusDirectorController.getCampusDirectors);
+router.get('/get/all', campusDirectorController.getCampusDirectors);
+router.post('/get/status', campusDirectorController.getCampusDirectorsByStatus);
+
+router.post('/login',campusDirectorController.login);
 
 router.post('/signup', [
     check('firstName')
