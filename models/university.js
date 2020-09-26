@@ -1,6 +1,4 @@
 const mongoose = require('mongoose');
-const uniqueValidator = require('mongoose-unique-validator');
-
 
 const universitySchema = new mongoose.Schema({
     name: {type: String, required: true},
@@ -9,6 +7,5 @@ const universitySchema = new mongoose.Schema({
     // cdCount: {type: Number, required: true}
 });
 
-universitySchema.plugin(uniqueValidator);
 
 module.exports = mongoose.model('University', universitySchema);

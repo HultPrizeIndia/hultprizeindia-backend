@@ -11,7 +11,9 @@ const campusDirectorSchema = new mongoose.Schema({
     university: {type: mongoose.Types.ObjectId, ref: 'University'},
     mobile: {type: String, required: true},
     joinDate: {type: Date, required: true},
-    tasks: [{type: mongoose.Types.ObjectId, ref: 'Task'}]
+    completedTasks:[{type: mongoose.Types.ObjectId, ref: 'Task'}],
+    onGoingTasks: [{type: mongoose.Types.ObjectId, ref: 'Task'}],
+    notStartedTasks: [{type: mongoose.Types.ObjectId, ref: 'Task'}]
 });
 
 campusDirectorSchema.plugin(uniqueValidator);

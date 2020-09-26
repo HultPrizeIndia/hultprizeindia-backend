@@ -9,23 +9,20 @@ const router = new express.Router();
 
 router.get('/', campusDirectorController.getCampusDirectors);
 
+router.post('/signup', [
+    check('firstName')
+        .not()
+        .isEmpty(),
+    check('email')
+        .normalizeEmail()
+        .isEmail(),
+    check('university').not().isEmpty(),
+    check('password').isLength({min: 6}),
+    check('mobile').not().isEmpty(),
+], campusDirectorController.signUp);
+
+
 // router.get('/:adminId', campusDirectorController.);
-//
-// router.post(
-//     '/signup',
-//     fileUpload.single('image'),
-//     [
-//         check('username')
-//             .not()
-//             .isEmpty(),
-//         check('email')
-//             .normalizeEmail()
-//             .isEmail(),
-//         check('mobile').not().isEmpty(),
-//         check('password').isLength({min: 6})
-//     ],
-//     adminController.signup
-// );
 //
 // router.post('/login', adminController.login);
 // router.get('/forgotPassword/:email', adminController.forgotPassword);

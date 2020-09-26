@@ -4,6 +4,7 @@ const {check} = require('express-validator');
 const adminController = require('../controllers/admin-controllers');
 const checkAuth = require('../middleware/check-auth');
 
+
 const router = new express.Router();
 
 router.get('/', adminController.getAdmins);

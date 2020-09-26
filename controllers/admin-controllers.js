@@ -2,7 +2,7 @@
 
 const RequestError = require('../models/request-error');
 const Admin = require('../models/admin');
-const authController = require('./authentication-controller')
+const authController = require('./authentication-controller');
 
 const getAdmins = async (req, res, next) => {
     let admins;

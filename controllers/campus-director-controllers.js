@@ -6,6 +6,8 @@
 
 const RequestError = require('../models/request-error');
 const CampusDirector = require('../models/campus-director');
+const authController = require('./authentication-controller');
+
 
 const getCampusDirectors = async (req, res, next) => {
     let campusDirectors;
@@ -18,5 +20,10 @@ const getCampusDirectors = async (req, res, next) => {
     await res.json({"status":"success",campusDirectors: campusDirectors.map(campusDirector => campusDirector.toObject({getters: true}))});
 };
 
+const signUp = async (req, res, next) => {
+    return authController.signUp(req, res,next, CampusDirector);
+}
+
 
 exports.getCampusDirectors = getCampusDirectors;
+exports.signUp = signUp;

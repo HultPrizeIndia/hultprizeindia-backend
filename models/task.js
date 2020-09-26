@@ -10,10 +10,10 @@ const uniqueValidator = require('mongoose-unique-validator');
 // 0  :-  Low
 // 1  :-  Medium
 // 2  :-  High
+
 const taskSchema = new mongoose.Schema({
     name: {type: String, required: true},
     description: {type: String, required: true},
-    status: {type: Number,default:0},
     priority: {type: Number, required: true},
     assignedBy: {type: mongoose.Types.ObjectId, ref: 'Admin'},
     givenDate:  {type: Date, required: true},
