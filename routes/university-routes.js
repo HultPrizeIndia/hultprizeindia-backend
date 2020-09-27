@@ -8,7 +8,7 @@ const checkAdmin = require('../middleware/check-admin');
 const router = new express.Router();
 
 
-router.get('/get/:uid', universityController.getUniversityById);
+router.get('/get/:universityId', universityController.getUniversityById);
 router.get('/all',universityController.getAllUniversities);
 
 router.post('/create',[
@@ -17,13 +17,13 @@ router.post('/create',[
     check('city').not().isEmpty(),
 ],checkAuth,checkAdmin,universityController.createUniversity);
 
-router.patch('/update/:uid', [
+router.patch('/update/:universityId', [
     check('state').not().isEmpty(),
     check('name').not().isEmpty(),
     check('city').not().isEmpty(),
 ],checkAuth, checkAdmin, universityController.updateUniversity);
 
-router.delete('/delete/:uid',checkAuth, checkAdmin, universityController.deleteUniversity);
+router.delete('/delete/:universityId',checkAuth, checkAdmin, universityController.deleteUniversity);
 
 router.delete('/deleteAll',checkAuth, checkAdmin, universityController.deleteAllUniversities);
 

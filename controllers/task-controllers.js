@@ -28,7 +28,13 @@ const getTaskById = async (req, res, next) => {
         const error = new RequestError('Fetching task failed, please try again later.', 500, err);
         return next(error);
     }
-    await res.json({"status": "success", task: task});
+    if(!task)
+    {
+        const error = new RequestError('Task not found', 404);
+        return next(error);
+    }
+        await res.json({"status": "success", task: task});
+
 };
 
 const getTasksByAdminId = async (req, res, next) => {
@@ -65,11 +71,9 @@ const createTaskForAll = async (req, res, next) => {
         givenDate: date,
         deadline
     });
-    let taskId;
+    // let taskId;
     try {
-        await createdTask.save(function (err, task) {
-            taskId = task._id;
-        });
+        await createdTask.save();
     } catch (err) {
         const error = new RequestError("Error creating task", 500, err);
         return next(error);
@@ -85,7 +89,7 @@ const createTaskForAll = async (req, res, next) => {
         const sess = await mongoose.startSession();
         sess.startTransaction();
         for (const campusDirector of campusDirectors) {
-            campusDirector.notStartedTasks.push(taskId);
+            campusDirector.notStartedTasks.push(createdTask._id);
             await campusDirector.save();
         }
         await sess.commitTransaction();
@@ -121,11 +125,8 @@ const createTaskForOne = async (req, res, next) => {
         givenDate: date,
         deadline
     });
-    let taskId;
     try {
-        await createdTask.save(function (err, task) {
-            taskId = task._id;
-        });
+        await createdTask.save();
     } catch (err) {
         const error = new RequestError("Error creating task", 500, err);
         return next(error);
@@ -141,7 +142,7 @@ const createTaskForOne = async (req, res, next) => {
     try {
         const sess = await mongoose.startSession();
         sess.startTransaction();
-        campusDirector.notStartedTasks.push(taskId);
+        campusDirector.notStartedTasks.push(createdTask._id);
         await campusDirector.save();
         await sess.commitTransaction();
 
@@ -183,8 +184,20 @@ const updateTask = async (req, res, next) => {
 
 const deleteTaskById = async (req, res, next) => {
     const taskId = req.params.taskId;
+    let task;
     try {
-        await Task.findByIdAndRemove(taskId);
+        task = await Task.findById(taskId);
+    } catch (err) {
+        const error = new RequestError('Fetching task failed, please try again later.', 500, err);
+        return next(error);
+    }
+    if(!task)
+    {
+        const error = new RequestError('Task not found', 404);
+        return next(error);
+    }
+    try {
+        await Task.deleteOne({_id:taskId});
     } catch (err) {
         const error = new RequestError('Deleting task failed, please try again later.', 500, err);
         return next(error);
@@ -197,17 +210,25 @@ const deleteTaskById = async (req, res, next) => {
         return next(error);
     }
     try {
+        console.log(taskId);
         const sess = await mongoose.startSession();
         sess.startTransaction();
+        //TODO: ask for help
         for (const campusDirector of campusDirectors) {
             if (campusDirector.completedTasks.includes(taskId)) {
+                console.log("In Comp");
                 campusDirector.completedTasks = campusDirector.completedTasks.filter(item => item !== taskId);
+                await campusDirector.save();
             } else if (campusDirector.onGoingTasks.includes(taskId)) {
+                console.log("In on ");
                 campusDirector.onGoingTask = campusDirector.onGoingTasks.filter(item => item !== taskId);
+                await campusDirector.save();
             } else {
-                campusDirector.notStartedTasks = campusDirector.notStartedTasks.filter(item => item !== taskId);
+                console.log("In not");
+                campusDirector.notStartedTasks = campusDirector.onGoingTasks.filter(item => item !== taskId);
+                await campusDirector.save();
             }
-            await campusDirector.save();
+
         }
         await sess.commitTransaction();
     } catch (err) {
@@ -223,7 +244,7 @@ const deleteTaskById = async (req, res, next) => {
 
 const deleteTasks = async (req, res, next) => {
     try {
-        await Task.remove({});
+        await Task.deleteMany({});
     } catch (err) {
         const error = new RequestError('Deleting tasks failed, please try again later.', 500, err);
         return next(error);

@@ -3,20 +3,27 @@ const RequestError = require('../models/request-error');
 const University = require('../models/university');
 
 const getUniversityById = async (req, res, next) => {
-    const universityId = req.params.uid;
+    const universityId = req.params.universityId;
     let university;
     try {
         university = await University.findById(universityId);
     } catch (err) {
         const error = new RequestError(
             'Fetching university failed, please try again later.',
-            500,err
+            500, err
+        );
+        return next(error);
+    }
+    if (!university) {
+        const error = new RequestError(
+            'University not found',
+            500
         );
         return next(error);
     }
     await res.json({university: university});
 };
-const getAllUniversities = async(req,res,next) => {
+const getAllUniversities = async (req, res, next) => {
     let universities;
     try {
         universities = await University.find({});
@@ -27,13 +34,26 @@ const getAllUniversities = async(req,res,next) => {
     await res.json({universities: universities.map(university => university.toObject({getters: true}))});
 };
 
-const createUniversity = async(req, res,next) =>{
+const createUniversity = async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return next(
             new RequestError('Invalid Inputs passed', 422, errors)
         );
     }
+    const {name, state, city} = req.body;
+
+    const university = new University({
+        name,
+        city, state
+    });
+    try {
+        await university.save();
+    } catch (err) {
+        const error = new RequestError("Error creating university", 500, err);
+        return next(error);
+    }
+
 };
 const updateUniversity = async (req, res, next) => {
     const errors = validationResult(req);
@@ -42,11 +62,54 @@ const updateUniversity = async (req, res, next) => {
             new RequestError('Invalid Inputs passed', 422, errors)
         );
     }
+    const universityId = req.params.universityId;
+    const {name, state, city} = req.body;
 
+    const updatableFields = {
+        name, state, city
+    };
+    try {
+        await University.findByIdAndUpdate(universityId, updatableFields);
+    } catch (err) {
+        const error = new RequestError("Error fetching university", 500, err);
+        return next(error);
+    }
+    await res
+        .status(201)
+        .json({"status": "success", updatedFields: updatableFields,});
 };
 
-const deleteUniversity = async(req,res, next) => {};
-const deleteAllUniversities = async(req,res, next) => {};
+const deleteUniversity = async (req, res, next) => {
+    const universityId = req.params.universityId;
+    let university;
+    try {
+        university = await University.findById(universityId);
+    } catch (err) {
+        const error = new RequestError('Fetching university failed, please try again later.', 500, err);
+        return next(error);
+    }
+    if (!university) {
+        const error = new RequestError('University not found', 404);
+        return next(error);
+    }
+    try {
+        await University.deleteOne({_id: universityId});
+    } catch (err) {
+        const error = new RequestError('Deleting task failed, please try again later.', 500, err);
+        return next(error);
+    }
+    res.json({"status": "Success", message: "University deleted"});
+};
+
+const deleteAllUniversities = async (req, res, next) => {
+    try {
+        await University.deleteMany({});
+    } catch (err) {
+        const error = new RequestError('Deleting universities failed, please try again later.', 500, err);
+        return next(error);
+    }
+    res.json({"status": "Success", message: "All universities deleted"});
+};
 
 exports.getAllUniversities = getAllUniversities;
 exports.getUniversityById = getUniversityById;
