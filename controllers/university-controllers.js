@@ -21,7 +21,7 @@ const getUniversityById = async (req, res, next) => {
         );
         return next(error);
     }
-    await res.json({university: university});
+    await res.json({"status":"success",university: university});
 };
 const getAllUniversities = async (req, res, next) => {
     let universities;
@@ -31,7 +31,7 @@ const getAllUniversities = async (req, res, next) => {
         const error = new RequestError('Fetching universities failed, please try again later.', 500, err);
         return next(error);
     }
-    await res.json({universities: universities.map(university => university.toObject({getters: true}))});
+    await res.json({"status":"success",universities: universities.map(university => university.toObject({getters: true}))});
 };
 
 const createUniversity = async (req, res, next) => {
@@ -41,11 +41,13 @@ const createUniversity = async (req, res, next) => {
             new RequestError('Invalid Inputs passed', 422, errors)
         );
     }
+
     const {name, state, city} = req.body;
 
     const university = new University({
         name,
-        city, state
+        city,
+        state
     });
     try {
         await university.save();
@@ -53,7 +55,7 @@ const createUniversity = async (req, res, next) => {
         const error = new RequestError("Error creating university", 500, err);
         return next(error);
     }
-
+    res.json({"status":"success",university});
 };
 const updateUniversity = async (req, res, next) => {
     const errors = validationResult(req);

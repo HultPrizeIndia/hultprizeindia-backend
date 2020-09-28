@@ -28,12 +28,11 @@ const getTaskById = async (req, res, next) => {
         const error = new RequestError('Fetching task failed, please try again later.', 500, err);
         return next(error);
     }
-    if(!task)
-    {
+    if (!task) {
         const error = new RequestError('Task not found', 404);
         return next(error);
     }
-        await res.json({"status": "success", task: task});
+    await res.json({"status": "success", task: task});
 
 };
 
@@ -191,13 +190,12 @@ const deleteTaskById = async (req, res, next) => {
         const error = new RequestError('Fetching task failed, please try again later.', 500, err);
         return next(error);
     }
-    if(!task)
-    {
+    if (!task) {
         const error = new RequestError('Task not found', 404);
         return next(error);
     }
     try {
-        await Task.deleteOne({_id:taskId});
+        await Task.deleteOne({_id: taskId});
     } catch (err) {
         const error = new RequestError('Deleting task failed, please try again later.', 500, err);
         return next(error);
@@ -214,19 +212,35 @@ const deleteTaskById = async (req, res, next) => {
         const sess = await mongoose.startSession();
         sess.startTransaction();
         //TODO: ask for help
+        let newTasks = [];
         for (const campusDirector of campusDirectors) {
             if (campusDirector.completedTasks.includes(taskId)) {
                 console.log("In Comp");
-                campusDirector.completedTasks = campusDirector.completedTasks.filter(item => item !== taskId);
+                for (const task of campusDirector.completedTasks) {
+                    if (task != taskId)
+                        newTasks.push(task);
+                }
+                campusDirector.completedTasks = newTasks;
                 await campusDirector.save();
+                newTasks = [];
             } else if (campusDirector.onGoingTasks.includes(taskId)) {
                 console.log("In on ");
-                campusDirector.onGoingTask = campusDirector.onGoingTasks.filter(item => item !== taskId);
+                for (const task of campusDirector.onGoingTasks) {
+                    if (task != taskId)
+                        newTasks.push(task);
+                }
+                campusDirector.onGoingTask = newTasks;
                 await campusDirector.save();
+                newTasks = [];
             } else {
                 console.log("In not");
-                campusDirector.notStartedTasks = campusDirector.onGoingTasks.filter(item => item !== taskId);
+                for (const task of campusDirector.notStartedTasks) {
+                    if (task != taskId)
+                        newTasks.push(task);
+                }
+                campusDirector.notStartedTasks = newTasks;
                 await campusDirector.save();
+                newTasks = [];
             }
 
         }
