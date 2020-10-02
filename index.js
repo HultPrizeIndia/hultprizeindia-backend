@@ -13,6 +13,7 @@ const RequestError = require('./models/request-error');
 // Routes
 const adminRoutes = require('./routes/admin-routes');
 const taskRoutes = require('./routes/task-routes');
+const referralRoutes = require('./routes/referral-routes');
 const liveRoutes = require('./routes/live-routes');
 const universityRoutes = require('./routes/university-routes');
 const campusDirectorRoutes = require('./routes/campus-director-routes');
@@ -41,6 +42,7 @@ app.use('/uploads/images', express.static(path.join('uploads', 'images')));
 app.use('/api/v1/admin', adminRoutes);
 app.use('/api/v1/campusDirector', campusDirectorRoutes);
 app.use('/api/v1/task',taskRoutes);
+app.use('/api/v1/referral',referralRoutes);
 app.use('/api/v1/university',universityRoutes);
 app.use('/api/v1/live',liveRoutes);
 
