@@ -1,32 +1,32 @@
 const express = require('express');
-const {check} = require('express-validator');
+const { check } = require('express-validator');
 
-const referralController = require('../controllers/referral-controllers');
+const queryController = require('../controllers/query-controllers');
 const checkAuth = require('../middleware/check-auth');
 const checkAdmin = require('../middleware/check-admin');
 
 const router = new express.Router();
 
-router.get('/get/all', referralController.getAllReferrals);
-router.get('/get/:referralId', referralController.getReferralById);
+router.get('/get/all', queryController.getAllReferrals);
+router.get('/get/:referralId', queryController.getReferralById);
 
 router.post('/create', [
     check('description').not().isEmpty(),
     check('name').not().isEmpty(),
     check('email').not().isEmpty(),
     check('mobile').not().isEmpty()
-], checkAuth, referralController.createReferral);
+], checkAuth, queryController.createReferral);
 
 router.patch('/update/:referralId', [
     check('description').not().isEmpty(),
     check('name').not().isEmpty(),
     check('email').not().isEmpty(),
     check('mobile').not().isEmpty()
-], checkAuth, referralController.updateReferral);
+], checkAuth, queryController.updateReferral);
 
-router.delete('/delete/:referralId', checkAuth, checkAdmin, referralController.deleteReferral);
+router.delete('/delete/:referralId', checkAuth, checkAdmin, queryController.deleteReferral);
 
 // Very dangerous route. Why is it even implemented?
-router.delete('/deleteAll', checkAuth, checkAdmin, referralController.deleteAllReferrals);
+router.delete('/deleteAll', checkAuth, checkAdmin, queryController.deleteAllReferrals);
 
 module.exports = router;
