@@ -44,7 +44,7 @@ app.use('/api/v1/admin', adminRoutes);
 app.use('/api/v1/campusDirector', campusDirectorRoutes);
 app.use('/api/v1/task',taskRoutes);
 app.use('/api/v1/referral',referralRoutes);
-app.user('api/v1/query', queryRoutes);
+app.use('/api/v1/query', queryRoutes);
 app.use('/api/v1/university',universityRoutes);
 app.use('/api/v1/live',liveRoutes);
 

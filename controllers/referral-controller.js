@@ -32,7 +32,7 @@ const getAllReferrals = async (req, res, next) => {
         const error = new RequestError('Fetching referrals failed, please try again later.', 500, err);
         return next(error);
     }
-    await res.json({"status": "success", referrals: referrals.map(referral => referral.toObject({getters: true}))});
+    await res.json({"status": "success", "referrals": referrals.map(referral => referral.toObject({getters: true}))});
 };
 
 const createReferral = async (req, res, next) => {
@@ -60,7 +60,7 @@ const createReferral = async (req, res, next) => {
         const error = new RequestError("Error creating referral", 500, err);
         return next(error);
     }
-    res.json({"status": "success", referral});
+    res.json({"status": "success", "referral":referral});
 };
 
 const updateReferral = async (req, res, next) => {
@@ -90,7 +90,7 @@ const updateReferral = async (req, res, next) => {
     }
     await res
         .status(201)
-        .json({"status": "success", updatedFields: updatableFields,});
+        .json({"status": "success", "updatedFields": updatableFields,});
 };
 
 const deleteReferral = async (req, res, next) => {
@@ -109,10 +109,10 @@ const deleteReferral = async (req, res, next) => {
     try {
         await Referral.deleteOne({_id: referralId});
     } catch (err) {
-        const error = new RequestError('Deleting task failed, please try again later.', 500, err);
+        const error = new RequestError('Deleting referral failed, please try again later.', 500, err);
         return next(error);
     }
-    res.json({"status": "Success", message: "Referral deleted"});
+    res.json({"status": "Success", "message": "Referral deleted"});
 };
 
 const deleteAllReferrals = async (req, res, next) => {
@@ -122,7 +122,7 @@ const deleteAllReferrals = async (req, res, next) => {
         const error = new RequestError('Deleting referrals failed, please try again later.', 500, err);
         return next(error);
     }
-    res.json({"status": "Success", message: "All referrals deleted"});
+    res.json({"status": "Success", "message": "All referrals deleted"});
 };
 
 exports.getAllReferrals = getAllReferrals;

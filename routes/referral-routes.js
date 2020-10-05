@@ -1,7 +1,7 @@
 const express = require('express');
 const {check} = require('express-validator');
 
-const referralController = require('../controllers/referral-controllers');
+const referralController = require('../controllers/referral-controller');
 const checkAuth = require('../middleware/check-auth');
 const checkAdmin = require('../middleware/check-admin');
 

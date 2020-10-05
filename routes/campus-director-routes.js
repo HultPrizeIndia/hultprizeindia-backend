@@ -1,7 +1,7 @@
 const express = require('express');
 const {check} = require('express-validator');
 
-const campusDirectorController = require('../controllers/campus-director-controllers');
+const campusDirectorController = require('../controllers/campus-director-controller');
 const checkAuth = require('../middleware/check-auth');
 const checkAdmin = require('../middleware/check-admin');
 
