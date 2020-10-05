@@ -12,7 +12,7 @@ module.exports = async (req, res, next) => {
     }
 
     if (!existingAdmin) {
-        const error = new RequestError('Only admin can create tasks.', 422);
+        const error = new RequestError('Unauthorized admin-only request', 422);
         return next(error);
     }
     else {
