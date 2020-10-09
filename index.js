@@ -1,7 +1,6 @@
 require('dotenv').config();
 // External Libraries
 const express = require('express');
-const bodyParser = require('body-parser');
 
 // Inbuilt Libraries
 const fs = require('fs');
@@ -12,7 +11,7 @@ const RequestError = require('./models/request-error');
 const connection = require('./utils/connection');
 
 // Routes
-// const adminRoutes = require('./routes/admin-routes');
+const adminRoutes = require('./routes/admin-routes');
 const taskRoutes = require('./routes/task-routes');
 const referralRoutes = require('./routes/referral-routes');
 const liveRoutes = require('./routes/live-routes');
@@ -21,10 +20,9 @@ const campusDirectorRoutes = require('./routes/campus-director-routes');
 const queryRoutes = require('./routes/query-routes');
 
 
-
 // Setup server:
 const app = express();
-app.use(bodyParser.json());
+app.use(express.json());
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader(
@@ -41,13 +39,13 @@ app.use('/uploads/images', express.static(path.join('uploads', 'images')));
 
 
 // Setup Routes:
-// app.use('/api/v1/admin', adminRoutes);
+app.use('/api/v1/admin', adminRoutes);
 app.use('/api/v1/campusDirector', campusDirectorRoutes);
-app.use('/api/v1/task',taskRoutes);
-app.use('/api/v1/referral',referralRoutes);
+app.use('/api/v1/task', taskRoutes);
+app.use('/api/v1/referral', referralRoutes);
 app.use('/api/v1/query', queryRoutes);
-app.use('/api/v1/university',universityRoutes);
-app.use('/api/v1/live',liveRoutes);
+app.use('/api/v1/university', universityRoutes);
+app.use('/api/v1/live', liveRoutes);
 
 // Unsupported Routes.
 app.use((req, res, next) => {
