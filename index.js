@@ -70,10 +70,11 @@ app.use((error, req, res, next) => {
 });
 
 
-const server = app.listen(process.env.SV_PORT, () => {
+const server = app.listen(process.env.SV_PORT, async () => {
     console.log(`\n${process.env.APP_NAME} Started\nListening on port: ${process.env.SV_PORT}`);
-    connection.connect();
+    await connection.connect();
 });
 
 
-exports.server = server;
+// exports.server = server;
+module.exports = server;

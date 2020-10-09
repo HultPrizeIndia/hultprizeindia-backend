@@ -6,7 +6,8 @@ const expect = chai.expect
 
 
 const connection = require('../utils/connection');
-const {server} = require('../index');
+// const {server} = require('../index');
+const server = require('../index');
 
 describe("Test CampusDirector Routes", function() {
     it("it should get all CDs", function(done) {
