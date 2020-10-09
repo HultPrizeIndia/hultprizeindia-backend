@@ -38,6 +38,7 @@ app.use((req, res, next) => {
 app.use('/uploads/images', express.static(path.join('uploads', 'images')));
 
 
+
 // Setup Routes:
 app.use('/api/v1/admin', adminRoutes);
 app.use('/api/v1/campusDirector', campusDirectorRoutes);
