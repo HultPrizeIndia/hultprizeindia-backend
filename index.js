@@ -1,3 +1,4 @@
+require('dotenv').config();
 // External Libraries
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -9,9 +10,10 @@ const path = require('path');
 
 // Custom Libraries
 const RequestError = require('./models/request-error');
+const connection = require('./utils/connection');
 
 // Routes
-const adminRoutes = require('./routes/admin-routes');
+// const adminRoutes = require('./routes/admin-routes');
 const taskRoutes = require('./routes/task-routes');
 const referralRoutes = require('./routes/referral-routes');
 const liveRoutes = require('./routes/live-routes');
@@ -40,7 +42,7 @@ app.use('/uploads/images', express.static(path.join('uploads', 'images')));
 
 
 // Setup Routes:
-app.use('/api/v1/admin', adminRoutes);
+// app.use('/api/v1/admin', adminRoutes);
 app.use('/api/v1/campusDirector', campusDirectorRoutes);
 app.use('/api/v1/task',taskRoutes);
 app.use('/api/v1/referral',referralRoutes);
@@ -71,18 +73,10 @@ app.use((error, req, res, next) => {
 });
 
 
+const server = app.listen(process.env.SV_PORT, () => {
+    console.log(`\n${process.env.APP_NAME} Started\nListening on port: ${process.env.SV_PORT}`);
+    connection.connect();
+});
 
-mongoose.connect(`${process.env.DB_URL}`, {
-    useNewUrlParser: true, 
-    useUnifiedTopology: true, 
-    useCreateIndex: true,
- useFindAndModify: false
-}).then(() => {
-        app.listen(process.env.SV_PORT, () => {
-            console.log(`\n${process.env.APP_NAME} Started\nListening on port: ${process.env.SV_PORT}`);
-            console.log(`Connected to DB at ${process.env.DB_URL} \nUsing DB: ${process.env.DB_Name}`);
-        });
-    }).catch(err => {
-        console.log(`Error occured while connecting to database: ${process.env.DB_URL}`)
-        console.log(err);
-    });
+
+exports.server = server;
