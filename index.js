@@ -13,7 +13,7 @@ const RequestError = require('./models/request-error');
 const connection = require('./utils/connection');
 
 // Routes
-const adminRoutes = require('./routes/admin-routes');
+// const adminRoutes = require('./routes/admin-routes');
 const taskRoutes = require('./routes/task-routes');
 const referralRoutes = require('./routes/referral-routes');
 const liveRoutes = require('./routes/live-routes');
@@ -42,7 +42,7 @@ app.use('/uploads/images', express.static(path.join('uploads', 'images')));
 
 
 // Setup Routes:
-app.use('/api/v1/admin', adminRoutes);
+// app.use('/api/v1/admin', adminRoutes);
 app.use('/api/v1/campusDirector', campusDirectorRoutes);
 app.use('/api/v1/task',taskRoutes);
 app.use('/api/v1/referral',referralRoutes);
@@ -75,9 +75,7 @@ app.use((error, req, res, next) => {
 
 const server = app.listen(process.env.SV_PORT, () => {
     console.log(`\n${process.env.APP_NAME} Started\nListening on port: ${process.env.SV_PORT}`);
-    if (process.env.NODE_ENV != 'test') {
-        connection.connect();
-    }
+    connection.connect();
 });
 
 
