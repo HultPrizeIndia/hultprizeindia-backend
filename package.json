@@ -11,7 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/HultPrizeIndia/hultprizeindia-backend.git"
   },
-  "author": "Raghav Vashisht, Shivam Verma, S.Mohan Gautaum",
+  "author": "Raghav Vashisht, Shivam Verma, S.Mohan Gautam",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/HultPrizeIndia/hultprizeindia-backend/issues"
