@@ -5,8 +5,6 @@ function connect() {
   return new Promise((resolve, reject) => {
 
     if (process.env.NODE_ENV === 'test') {
-        // TODO: CONNECT TO TEST DB
-
         const mongod = new MongoMemoryServer();
         mongod.getUri().then(uri => {
             mongod.getDbName().then( dbName => {
@@ -25,7 +23,6 @@ function connect() {
                     resolve();
                 });
             })
-
         });
         
     } else {

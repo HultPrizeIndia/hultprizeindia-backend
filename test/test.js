@@ -28,3 +28,10 @@ describe("Test CampusDirector Routes", function() {
         });
     });
   });
+
+
+  after((done) => {
+      connection.close()
+        .then(() => done())
+        .catch(err => done(err));
+  });
