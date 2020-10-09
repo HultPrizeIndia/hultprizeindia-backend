@@ -1,7 +1,7 @@
-# Project Title - HultPrizeIndia - Backend
+<!-- # Project Title - HultPrizeIndia - Backend
 # Introduction - The Backend Development of HultPrize
 # Technologies - NodeJs, ExpressJs, Jwt
-# Members - Raghav Vashisht,Shivam Verma, S Mohan Gautam
+# Members - Raghav Vashisht,Shivam Verma, S Mohan Gautam -->
 
 <h1 align="center"> HultPrizeIndia-backend </h1> <br>
 
