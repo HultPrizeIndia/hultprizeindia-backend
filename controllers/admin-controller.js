@@ -39,6 +39,18 @@ const getAdminById = async (req, res, next) => {
 const signUp = async (req, res, next) => {
     return authController.signUp(req, res,next, Admin);
 }
+
+const login = async (req,res, next) => {
+    return authController.login(req,res,next,Admin);
+}
+const forgotPassword = async (req,res, next) => {
+    return authController.forgotPassword(req,res,next,Admin);
+}
+
+const changePassword = async (req,res, next) => {
+    return authController.changePassword(req,res,next,Admin);
+}
+
 // const forgotPassword = async (req, res, next) => {
 //     const email = req.params.email;
 //     let password = Math.random().toString().substring(0, 3) + Math.random().toString().slice(0, 3) + 'win';
@@ -423,7 +435,8 @@ const signUp = async (req, res, next) => {
 exports.getAdmins = getAdmins;
 // exports.editUser = editUser;
 exports.signUp = signUp;
+exports.login = login;
 // exports.login = login;
-// exports.forgotPassword = forgotPassword;
-// exports.changePassword = changePassword;
+exports.forgotPassword = forgotPassword;
+exports.changePassword = changePassword;
 exports.getAdminById = getAdminById;

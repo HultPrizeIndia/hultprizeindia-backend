@@ -23,6 +23,19 @@ router.post('/signup', [
     check('mobile').not().isEmpty(),
 ], adminController.signUp);
 
+router.post('/login',[
+    check('email')
+        .not()
+        .isEmpty(),
+    check('password').isLength({min: 6}),
+
+],adminController.login);
+
+router.post('/changePassword',checkAuth,adminController.changePassword);
+router.post('/forgotPassword',checkAuth,adminController.forgotPassword);
+
+router.post()
+
 
 
 
