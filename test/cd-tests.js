@@ -23,7 +23,12 @@ describe("Test CampusDirector Routes", function() {
 
 
 after((done) => {
-    connection.close()
-    .then(() => done())
-    .catch(err => done(err));
+    server.close(() => {
+        console.log("Closing server");
+        connection.close()
+        .then(() => {
+            console.log("Closing TestDB server");
+            done();
+        }).catch(err => done(err));
+    });
 });

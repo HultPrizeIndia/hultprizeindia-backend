@@ -4,7 +4,7 @@
   "description": "REST-ful backend for Hult Prize India community",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha --recursive --exit"
   },
   "repository": {
     "type": "git",
