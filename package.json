@@ -4,7 +4,7 @@
   "description": "REST-ful backend for Hult Prize India community",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -19,10 +19,14 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
+    "chai": "^4.2.0",
     "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-validator": "^6.6.1",
     "jsonwebtoken": "^8.5.1",
+    "mocha": "^8.1.3",
+    "mongodb-memory-server": "^6.9.1",
     "mongoose": "^5.10.6",
     "mongoose-unique-validator": "^2.0.3",
     "multer": "^1.4.2",
@@ -30,6 +34,7 @@
     "nodemailer": "^6.4.11",
     "nodemailer-smtp-transport": "^2.7.4",
     "nodemon": "^2.0.4",
+    "supertest": "^5.0.0",
     "uuid": "^8.3.0"
   },
   "devDependencies": {}
