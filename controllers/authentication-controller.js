@@ -1,14 +1,43 @@
-
 const bcrypt = require("bcryptjs");
 const jwt = require('jsonwebtoken');
-// const mailer = require('nodemailer');
+const mailer = require('nodemailer');
+const smtpTransport = require('nodemailer-smtp-transport');
+
 
 const RequestError = require("../models/request-error");
 
 const validationResult = require("express-validator").validationResult;
-// const Admin = require("../models/user");
-const CD = require("../models/campus-director");
 
+function sendMail(code, email) {
+    let transporter = mailer.createTransport(smtpTransport({
+        service: 'gmail',
+        host: 'smtp.gmail.com',
+        auth: {
+            user: process.env.Email_Name,
+            pass: process.env.Email_Pass
+        }
+    }));
+
+    const mailOptions = {
+        from: process.env.Email_Name,
+        to: email,
+        subject: '',
+        text: `${code} 
+        Use this as a temporary password, please change it when you login. 
+        We will not be responsible if it is leaked.`
+    };
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.log(error);
+            // return [constants.fail, "Mail hi ni gyi"]
+            // transporter.close();
+        } else {
+            // return [constants.inProgress, "Not yet returned"];
+            console.log("yay");
+            // transporter.close();
+        }
+    });
+}
 
 // signUp
 const signUp = async (req, res, next, dbType) => {
@@ -21,8 +50,7 @@ const signUp = async (req, res, next, dbType) => {
     }
 
 
-
-    const {firstName, lastName, email, password, mobile,university} = req.body;
+    const {firstName, lastName, email, password, mobile, university} = req.body;
     let existingUser;
     try {
         existingUser = await dbType.findOne({email: email});
@@ -32,7 +60,7 @@ const signUp = async (req, res, next, dbType) => {
     }
 
     if (existingUser) {
-        const error = new RequestError('User exists already, please login instead.',422);
+        const error = new RequestError('User exists already, please login instead.', 422);
         return next(error);
     }
 
@@ -45,7 +73,6 @@ const signUp = async (req, res, next, dbType) => {
     }
     const date = Date().toLocaleString();
 
-   
 
     // let filePath;
     // try {
@@ -82,7 +109,7 @@ const signUp = async (req, res, next, dbType) => {
     try {
         token = jwt.sign(
             {userId: createdUser.id, email: createdUser.email},
-            process.env.Jwt_Key,{
+            process.env.Jwt_Key, {
                 expiresIn: '2d' // expires in 2d
             }
         );
@@ -93,7 +120,7 @@ const signUp = async (req, res, next, dbType) => {
 
     await res
         .status(201)
-        .json({"status":"success",user: createdUser, email: createdUser.email, token: token});
+        .json({"status": "success", user: createdUser, email: createdUser.email, token: token});
 };
 
 // login
@@ -105,7 +132,7 @@ const login = async (req, res, next, dbType) => {
     try {
         existingUser = await dbType.findOne({email: email});
     } catch (err) {
-        const error = new HttpError(
+        const error = new RequestError(
             err.message,
             500
         );
@@ -113,7 +140,7 @@ const login = async (req, res, next, dbType) => {
     }
 
     if (!existingUser) {
-        const error = new HttpError(
+        const error = new RequestError(
             'You are not registered!!!',
             403
         );
@@ -127,7 +154,7 @@ const login = async (req, res, next, dbType) => {
     try {
         isValidPassword = await bcrypt.compare(password, existingUser.password);
     } catch (err) {
-        const error = new HttpError(
+        const error = new RequestError(
             'Could not log you in, please check your credentials and try again.',
             500
         );
@@ -135,7 +162,7 @@ const login = async (req, res, next, dbType) => {
     }
 
     if (!isValidPassword) {
-        const error = new HttpError(
+        const error = new RequestError(
             'Wrong Password!!',
             403
         );
@@ -149,7 +176,7 @@ const login = async (req, res, next, dbType) => {
             process.env.Jwt_Key,
         );
     } catch (err) {
-        const error = new HttpError(
+        const error = new RequestError(
             'Logging in failed, please try again later.',
             500
         );
@@ -162,29 +189,32 @@ const login = async (req, res, next, dbType) => {
     });
 };
 
+//todo: fix nodemailer
 const forgotPassword = async (req, res, next, dbType) => {
     const email = req.params.email;
-    let password = Math.random().toString().substring(0, 3) + Math.random().toString().slice(0, 3) + 'win';
+    console.log(email);
+    let password = Math.random().toString().substring(0, 3) + Math.random().toString().slice(0, 3) + 'hult';
     let user;
     try {
         user = await dbType.findOne({
             email
         });
     } catch (err) {
-        const error = new HttpError("Something went wrong, please try again later.", err.status);
+        const error = new RequestError("Something went wrong, please try again later.", err.status);
         return next(error);
     }
     if (!user) {
-        const error = new HttpError(
+
+        const error = new RequestError(
             'You are not registered!!!',
             403
         );
         return next(error);
     }
-    try{
+    try {
         await sendMail(password, email);
-    }catch (err){
-        const error = new HttpError(
+    } catch (err) {
+        const error = new RequestError(
             'Error in sending mail!!!',
             500
         );
@@ -195,7 +225,7 @@ const forgotPassword = async (req, res, next, dbType) => {
     try {
         hashedPassword = await bcrypt.hash(password, 12);
     } catch (err) {
-        const error = new HttpError(
+        const error = new RequestError(
             'Could not create user, please try again.',
             500
         );
@@ -205,7 +235,7 @@ const forgotPassword = async (req, res, next, dbType) => {
     try {
         await user.save();
     } catch (err) {
-        const error = new HttpError("Error saving user, try again later.", err.status);
+        const error = new RequestError("Error saving user, try again later.", err.status);
         return next(error);
     }
 
@@ -215,25 +245,25 @@ const forgotPassword = async (req, res, next, dbType) => {
 
 };
 
-const changePassword = async (req, res, next , dbType) => {
+const changePassword = async (req, res, next, dbType) => {
     const userId = req.userData.userId;
     console.log(userId);
     let user;
     try {
         user = await dbType.findById(userId)
     } catch (err) {
-        const error = new HttpError("Something went wrong can't get user.", 500);
+        const error = new RequestError("Something went wrong can't get user.", 500);
         return next(error);
     }
     if (!user) {
-        const error = new HttpError("Can't find user for provided id", 404);
+        const error = new RequestError("Can't find user for provided id", 404);
         return next(error);
     }
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
         return next(
-            new HttpError('Invalid inputs passed, please check your data.', 422)
+            new RequestError('Invalid inputs passed, please check your data.', 422)
         );
     }
     const newPassword = req.body.newPassword;
@@ -242,7 +272,7 @@ const changePassword = async (req, res, next , dbType) => {
     try {
         isValidPassword = await bcrypt.compare(currentPassword, user.password);
     } catch (err) {
-        const error = new HttpError(
+        const error = new RequestError(
             'Could not log you in, please check your credentials and try again.',
             500
         );
@@ -250,7 +280,7 @@ const changePassword = async (req, res, next , dbType) => {
     }
 
     if (!isValidPassword) {
-        const error = new HttpError(
+        const error = new RequestError(
             'Wrong Password!!',
             403
         );
@@ -260,7 +290,7 @@ const changePassword = async (req, res, next , dbType) => {
     try {
         hashedPassword = await bcrypt.hash(newPassword, 12);
     } catch (err) {
-        const error = new HttpError(
+        const error = new RequestError(
             'Could not update password, please try again.',
             500
         );
@@ -270,7 +300,7 @@ const changePassword = async (req, res, next , dbType) => {
     try {
         await user.save();
     } catch (err) {
-        const error = new HttpError("Error saving user, try again later.", err.status);
+        const error = new RequestError("Error saving user, try again later.", err.status);
         return next(error);
     }
 

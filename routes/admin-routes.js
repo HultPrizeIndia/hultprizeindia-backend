@@ -11,6 +11,9 @@ router.get('/', adminController.getAdmins);
 
 router.get('/:adminId', adminController.getAdminById);
 
+router.get('/forgotPassword/:email', adminController.forgotPassword);
+
+
 router.post('/signup', [
     check('firstName')
         .not()
@@ -23,52 +26,21 @@ router.post('/signup', [
     check('mobile').not().isEmpty(),
 ], adminController.signUp);
 
-router.post('/login',[
+router.post('/login', [
     check('email')
         .not()
         .isEmpty(),
     check('password').isLength({min: 6}),
 
-],adminController.login);
-
-router.post('/changePassword',checkAuth,adminController.changePassword);
-router.post('/forgotPassword',checkAuth,adminController.forgotPassword);
-
-router.post()
+], adminController.login);
 
 
-
-
-//
-// router.post(
-//     '/signup',
-//     fileUpload.single('image'),
-//     [
-//         check('username')
-//             .not()
-//             .isEmpty(),
-//         check('email')
-//             .normalizeEmail()
-//             .isEmail(),
-//         check('mobile').not().isEmpty(),
-//         check('password').isLength({min: 6})
-//     ],
-//     adminController.signup
-// );
-//
-// router.post('/login', adminController.login);
-// router.get('/forgotPassword/:email', adminController.forgotPassword);
-// // router.use(checkAuth); DO NOT USE THIS.
-// router.patch('/changePassword', [check('newPassword').isLength({min: 6})], adminController.changePassword);
-// router.patch('/edit', fileUpload.single('image'),
-//     [
-//         check('username')
-//             .not()
-//             .isEmpty(),
-//         check('email')
-//             .normalizeEmail()
-//             .isEmail(),
-//         check('mobile').not().isEmpty()
-//     ], adminController.editUser);
+router.patch('/changePassword',
+    [
+        check('newPassword').isLength({min: 6}),
+        check('currentPassword').isLength({min: 6})
+    ],
+    checkAuth,
+    adminController.changePassword);
 
 module.exports = router;

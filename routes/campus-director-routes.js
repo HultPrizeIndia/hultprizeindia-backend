@@ -9,9 +9,10 @@ const router = new express.Router();
 
 
 router.get('/get/all', campusDirectorController.getCampusDirectors);
-router.post('/get/status', campusDirectorController.getCampusDirectorsByStatus);
 
-router.post('/login',campusDirectorController.login);
+router.get('/forgotPassword/:email', campusDirectorController.forgotPassword);
+
+router.post('/get/status', campusDirectorController.getCampusDirectorsByStatus);
 
 router.post('/signup', [
     check('firstName')
@@ -25,7 +26,27 @@ router.post('/signup', [
     check('mobile').not().isEmpty(),
 ], campusDirectorController.signUp);
 
+
+router.post('/login', [
+    check('email')
+        .not()
+        .isEmpty(),
+    check('password').isLength({min: 6}),
+], campusDirectorController.login);
+
+
+router.patch('/changePassword',
+    [
+        check('newPassword').isLength({min: 6}),
+        check('currentPassword').isLength({min: 6})
+    ],
+    checkAuth,
+    campusDirectorController.changePassword);
+
+
 router.post('/delete', checkAuth, checkAdmin, campusDirectorController.deleteCD);
+
+
 
 // router.get('/:adminId', campusDirectorController.);
 //

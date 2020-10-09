@@ -44,6 +44,7 @@ const login = async (req,res, next) => {
     return authController.login(req,res,next,Admin);
 }
 const forgotPassword = async (req,res, next) => {
+    console.log("in here");
     return authController.forgotPassword(req,res,next,Admin);
 }
 
