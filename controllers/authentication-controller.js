@@ -187,9 +187,13 @@ const login = async (req, res, next, dbType) => {
         return next(error);
     }
 
+    const existingUserObj = existingUser.toObject();
+    // Delete password from local existingUser variable to avoid sending it to the User.
+    delete existingUserObj.password;
     await res.json({
-        user: existingUser,
-        token: token
+        "status": "success",
+        "user": existingUserObj,
+        "token": token
     });
 };
 
