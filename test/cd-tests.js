@@ -64,6 +64,27 @@ describe("Test CampusDirector POST Routes", () => {
         });
     });
 
+    it("Login CD with correct input", (done) => {
+        request(server)
+        .post("/api/v1/campusDirector/login")
+        .send({
+            "email": "test2@test.com",
+            "password": "testing123",
+        })
+        .end(function(err, res) {
+          if (err) done(err);
+          expect(res.status).to.equal(200);
+          expect(res.body.status).to.equal("success");
+          expect(res.body.user._id).to.not.be.undefined;
+          expect(res.body.user.firstName).to.not.be.undefined;
+          expect(res.body.user.university).to.not.be.undefined;
+          expect(res.body.user.email).to.not.be.undefined;
+          expect(res.body.user.password).to.be.undefined;
+          expect(res.body.token).to.not.be.undefined;
+          done();
+        });
+    });
+
 });
 
 describe("Test CampusDirector GET Routes", () => {
