@@ -28,6 +28,6 @@ jobs:
     - run: npm run build --if-present
     - run: npm test
       env:
-        APP_NAME="Hult Prize India Server"
-        Jwt_Key="wubbaLubbaDUBDUB*BURPS*"
-        NODE_ENV = 'dev'
+        APP_NAME: Hult Prize India Server
+        Jwt_Key: wubbaLubbaDUBDUB*BURPS*
+        NODE_ENV: dev
