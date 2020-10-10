@@ -136,7 +136,7 @@ const login = async (req, res, next, dbType) => {
             new RequestError('Invalid Inputs passed', 422)
         );
     }
-    
+
     const {email, password} = req.body;
     let existingUser;
 
@@ -174,7 +174,7 @@ const login = async (req, res, next, dbType) => {
 
     if (!isValidPassword) {
         const error = new RequestError(
-            'Wrong Password!!',
+            'Incorrect password entered.',
             403
         );
         return next(error);
