@@ -80,6 +80,22 @@ describe("Test CampusDirector POST Routes", () => {
         });
     });
 
+    it("Login CD with incorrect input", (done) => {
+        request(server)
+        .post("/api/v1/campusDirector/login")
+        .send({
+            "email": "test2@test.com",
+            "password": "ThIs iS a WrOnG PaSsWoRd",
+        })
+        .end(function(err, res) {
+          if (err) done(err);
+          expect(res.status).to.equal(403);
+          expect(res.body.status).to.equal("failed");
+          expect(res.body.message).to.equal("Incorrect password entered.");
+          done();
+        });
+    });
+
     it("Login CD with correct input", (done) => {
         request(server)
         .post("/api/v1/campusDirector/login")
