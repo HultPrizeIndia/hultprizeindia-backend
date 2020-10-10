@@ -129,8 +129,15 @@ const signUp = async (req, res, next, dbType) => {
 
 // login
 const login = async (req, res, next, dbType) => {
-    const {email, password} = req.body;
 
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return next(
+            new RequestError('Invalid Inputs passed', 422)
+        );
+    }
+    
+    const {email, password} = req.body;
     let existingUser;
 
     try {
