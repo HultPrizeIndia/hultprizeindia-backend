@@ -72,7 +72,9 @@ app.use((error, req, res, next) => {
 
 const server = app.listen(process.env.SV_PORT, async () => {
     console.log(`\n${process.env.APP_NAME} Started\nListening on port: ${process.env.SV_PORT}`);
-    await connection.connect();
+    if (process.env.NODE_ENV !== 'test') {
+        await connection.connect();
+    }
 });
 
 

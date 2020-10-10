@@ -14,6 +14,13 @@ const server = require('../index');
 //     done();
 // });
 
+// Run tests once the connection to DB has been made.
+before((done) => {
+    connection.connect().then(() => {
+        done();
+    });
+});
+
 describe("Test CampusDirector POST Routes", function() {
     it("Signup CDs with wrong input", function(done) {
         request(server)
@@ -52,7 +59,7 @@ describe("Test CampusDirector GET Routes", function() {
 
 after((done) => {
     server.close(() => {
-        console.log("Closing server");
+        console.log("Closing API server");
         connection.close()
         .then(() => {
             console.log("Closing TestDB server");

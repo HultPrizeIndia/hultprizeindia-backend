@@ -19,7 +19,7 @@ function connect() {
                         console.log(err);
                         return reject(err);
                     }
-                    console.log(`Connected to TestDB at ${uri} \nUsing DB: ${dbName}`);
+                    console.log(`Connected to TestDB at ${uri} \nUsing DB: ${dbName}\n\n`);
                     resolve();
                 });
             })
@@ -37,7 +37,7 @@ function connect() {
                 console.log(err);
                 return reject(err);
             }
-            console.log(`Connected to DB at ${process.env.DB_URL} \nUsing DB: ${process.env.DB_Name}`);
+            console.log(`Connected to DB at ${process.env.DB_URL} \nUsing DB: ${process.env.DB_Name}\n\n`);
             resolve();
         });
     }
