@@ -48,4 +48,15 @@ function close() {
   return mongoose.disconnect();
 }
 
+// function dropAll() {
+//     if (process.env.NODE_ENV === 'test') {
+//         const collections = mongoose.connection.db.collections().then(() => {
+//             for (let collection of collections) {
+//                 collection.deleteMany({});
+//            }
+//         }).catch(err => console.log(err));
+        
+//     }
+// }
+
 module.exports = { connect, close };
