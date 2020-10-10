@@ -41,6 +41,29 @@ describe("Test CampusDirector POST Routes", () => {
           done();
         });
     });
+
+    it("Signup CDs with correct input", (done) => {
+        request(server)
+        .post("/api/v1/campusDirector/signup")
+        .send({
+            "firstName": "test_Raghav",
+            "lastName": "test_Vashisht",
+            "email": "test2@test.com",
+            "password": "testing123",
+            "mobile": "1234567890",
+            "university": "5f6d160e722f09292b1d0f21"
+        })
+        .end(function(err, res) {
+          if (err) done(err);
+          expect(res.status).to.equal(201);
+          expect(res.body.status).to.equal("success");
+          expect(res.body.user._id).to.not.be.undefined;
+          expect(res.body.user.password).to.be.undefined;
+          expect(res.body.token).to.not.be.undefined;
+          done();
+        });
+    });
+
 });
 
 describe("Test CampusDirector GET Routes", () => {
