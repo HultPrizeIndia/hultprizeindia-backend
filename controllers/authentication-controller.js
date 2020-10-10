@@ -124,7 +124,7 @@ const signUp = async (req, res, next, dbType) => {
     
     await res
         .status(201)
-        .json({"status": "success", user: createdUser, email: createdUser.email, token: token});
+        .json({"status": "success", user: createdUserObj, email: createdUserObj.email, token: token});
 };
 
 // login
