@@ -118,6 +118,10 @@ const signUp = async (req, res, next, dbType) => {
         return next(error);
     }
 
+    // Delete password from local createdUser variable to avoid sending it to the User.
+    createdUserObj = createdUser.toObject();
+    delete createdUserObj.password;
+    
     await res
         .status(201)
         .json({"status": "success", user: createdUser, email: createdUser.email, token: token});
