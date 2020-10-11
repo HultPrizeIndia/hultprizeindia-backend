@@ -24,7 +24,7 @@ describe("CampusDirector Routes", () => {
                 // "mobile": "1234567890",
                 "university": "5f6d160e722f09292b1d0f21"
             })
-            .end(function(err, res) {
+            .end((err, res) => {
               if (err) done(err);
               expect(res.status).to.equal(422);
               expect(res.body.status).to.equal("failed");
@@ -44,7 +44,7 @@ describe("CampusDirector Routes", () => {
                 "mobile": "1234567890",
                 "university": "5f6d160e722f09292b1d0f21"
             })
-            .end(function(err, res) {
+            .end((err, res) => {
               if (err) done(err);
               expect(res.status).to.equal(201);
               expect(res.body.status).to.equal("success");
@@ -62,7 +62,7 @@ describe("CampusDirector Routes", () => {
                 "email": "test2@test.com",
                 // "password": "testing123",
             })
-            .end(function(err, res) {
+            .end((err, res) => {
               if (err) done(err);
               expect(res.status).to.equal(422);
               expect(res.body.status).to.equal("failed");
@@ -78,7 +78,7 @@ describe("CampusDirector Routes", () => {
                 "email": "test2@test.com",
                 "password": "ThIs iS a WrOnG PaSsWoRd",
             })
-            .end(function(err, res) {
+            .end((err, res) => {
               if (err) done(err);
               expect(res.status).to.equal(403);
               expect(res.body.status).to.equal("failed");
@@ -94,7 +94,7 @@ describe("CampusDirector Routes", () => {
                 "email": "test2@test.com",
                 "password": "testing123",
             })
-            .end(function(err, res) {
+            .end((err, res) => {
               if (err) done(err);
               expect(res.status).to.equal(200);
               expect(res.body.status).to.equal("success");
@@ -114,7 +114,7 @@ describe("CampusDirector Routes", () => {
         it("it should get all CDs", (done) => {
             request(server)
             .get("/api/v1/campusDirector/get/all")
-            .end(function(err, res) {
+            .end((err, res) => {
               if (err) done(err);
               expect(res.status).to.equal(200);
               expect(res.body.status).to.equal("success");

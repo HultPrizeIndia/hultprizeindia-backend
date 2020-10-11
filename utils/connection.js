@@ -9,7 +9,7 @@ const CampusDirector = require('../models/campus-director');
 // const Task = require('../models/task');
 // const University = require('../models/university');
 
-function connect() {
+const connect = () => {
   return new Promise((resolve, reject) => {
 
     if (process.env.NODE_ENV === 'test') {
@@ -53,11 +53,11 @@ function connect() {
   });
 }
 
-function close() {
+const close = () => {
   return mongoose.disconnect();
 }
 
-function setupTestDB() {
+const setupTestDB = () => {
     const cd = new CampusDirector({
         firstName: "test",
         lastName: "user",
@@ -108,7 +108,7 @@ function setupTestDB() {
     console.log("\nCreated dummy testDB data successfully!");
 }
 
-// function dropAll() {
+// const dropAll = () => {
 //     if (process.env.NODE_ENV === 'test') {
 //         const collections = mongoose.connection.db.collections().then(() => {
 //             for (let collection of collections) {

@@ -15,7 +15,7 @@ describe("Referral Routes", () => {
         it("it should get all referrals", (done) => {
             request(server)
                 .get("/api/v1/referral/get/all")
-                .end(function (err, res) {
+                .end((err, res) => {
                     if (err) done(err);
                     expect(res.status).to.equal(200);
                     expect(res.body.status).to.equal("success");
@@ -36,7 +36,7 @@ describe("Referral Routes", () => {
     //                 "email": "shivam@test.com",
     //                 "mobile": "9953798220"
     //             })
-    //             .end(function (err, res) {
+    //             .end((err, res) => {
     //                 if (err) done(err);
     //                 expect(res.status).to.equal(200);
     //                 expect(res.body.status).to.equal("success");
@@ -54,7 +54,7 @@ describe("Referral Routes", () => {
     //                 // "email": "shivam@test.com",
     //                 "mobile": "9953798220"
     //             })
-    //             .end(function (err, res) {
+    //             .end((err, res) => {
     //                 if (err) done(err);
     //                 expect(res.status).to.equal(422);
     //                 expect(res.body.status).to.equal("failed");
@@ -67,7 +67,7 @@ describe("Referral Routes", () => {
     //     it("it should delete all referrals", (done) => {
     //         request(server)
     //             .delete("/api/v1/referral/delete/all")
-    //             .end(function (err, res) {
+    //             .end((err, res) => {
     //                 if (err) done(err);
     //                 expect(res.status).to.equal(200);
     //                 expect(res.body.status).to.equal("success");
