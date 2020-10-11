@@ -44,12 +44,15 @@ const signUp = async (req, res, next, dbType) => {
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+        let params = "";
+         errors.array().forEach((e) => {
+            params += `${e.param}, `
+        });
+         params += "triggered the error!!";
         return next(
-            new RequestError('Invalid Inputs passed', 422)
+            new RequestError(params, 422)
         );
     }
-
-
     const {firstName, lastName, email, password, mobile, university} = req.body;
     let existingUser;
     try {
@@ -121,7 +124,7 @@ const signUp = async (req, res, next, dbType) => {
     // Delete password from local createdUser variable to avoid sending it to the User.
     createdUserObj = createdUser.toObject();
     delete createdUserObj.password;
-    
+
     await res
         .status(201)
         .json({"status": "success", user: createdUserObj, email: createdUserObj.email, token: token});
@@ -132,8 +135,13 @@ const login = async (req, res, next, dbType) => {
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+        let params = "";
+        errors.array().forEach((e) => {
+            params += `${e.param}, `
+        });
+        params += "triggered the error!!";
         return next(
-            new RequestError('Invalid Inputs passed', 422)
+            new RequestError(params, 422)
         );
     }
 
@@ -261,6 +269,7 @@ const forgotPassword = async (req, res, next, dbType) => {
 };
 
 const changePassword = async (req, res, next, dbType) => {
+
     const userId = req.userData.userId;
     console.log(userId);
     let user;
@@ -275,10 +284,14 @@ const changePassword = async (req, res, next, dbType) => {
         return next(error);
     }
     const errors = validationResult(req);
-
     if (!errors.isEmpty()) {
+        let params = "";
+        errors.array().forEach((e) => {
+            params += `${e.param}, `
+        });
+        params += "triggered the error!!";
         return next(
-            new RequestError('Invalid inputs passed, please check your data.', 422)
+            new RequestError(params, 422)
         );
     }
     const newPassword = req.body.newPassword;

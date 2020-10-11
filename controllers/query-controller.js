@@ -1,8 +1,8 @@
-const { validationResult } = require('express-validator');
+const {validationResult} = require('express-validator');
 const RequestError = require('../models/request-error');
 const Query = require('../models/query');
 
-const getQueryyId = async (req, res, next) => {
+const getQueryId = async (req, res, next) => {
     const queryId = req.params.queryId;
     let query;
     try {
@@ -30,15 +30,20 @@ const getAllQuery = async (req, res, next) => {
 }
 
 const createQuery = async (req, res, next) => {
-    const errors = validationResult(req);
-    const raisedBy = req.userData.userId;
 
+    const errors = validationResult(req);
     if (!errors.isEmpty()) {
+        let params = "";
+        errors.array().forEach((e) => {
+            params += `${e.param}, `
+        });
+        params += "triggered the error!!";
         return next(
-            new RequestError('Invalid Inputs passed', 422, errors)
+            new RequestError(params, 422)
         );
     }
 
+    const raisedBy = req.userData.userId;
     const {title, description, comment, raisedFor} = req.body;
     const raiseDate = Date().toLocaleString();
     const query = new Query({
@@ -55,19 +60,24 @@ const createQuery = async (req, res, next) => {
         const error = new RequestError("Error creating query", 500, err);
         return next(error);
     }
-    res.json({"status": "success", "query":query});
+    res.json({"status": "success", "query": query});
 
 }
 
 const updateQuery = async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+        let params = "";
+        errors.array().forEach((e) => {
+            params += `${e.param}, `
+        });
+        params += "triggered the error!!";
         return next(
-            new RequestError('Invalid Inputs passed', 422, errors)
+            new RequestError(params, 422)
         );
     }
     const queryId = req.params.queryId;
-    const { title, description, comment, raisedFor } = req.body;
+    const {title, description, comment, raisedFor} = req.body;
 
     const updatableFields = {
         title, description,
@@ -100,11 +110,11 @@ const deleteQuery = async (req, res, next) => {
         return next(error);
     }
     try {
-        if (raisedBy == query.raisedBy) {
+        if (raisedBy === query.raisedBy) {
             await Query.deleteOne({_id: queryId});
         } else {
-            // Add exception for Admins, currectly Query is deleted only by its creator.
-            return res.json({"status": "failed", "message": "invaild queryId for CD"});
+            // Add exception for Admins, currently Query is deleted only by its creator.
+            return res.json({"status": "failed", "message": "invalid queryId for CD"});
         }
     } catch (err) {
         const error = new RequestError('Deleting query failed, please try again later.', 500, err);
@@ -124,7 +134,7 @@ const deleteAllQueries = async (req, res, next) => {
 }
 
 
-exports.getQueryyId = getQueryyId;
+exports.getQueryyId = getQueryId;
 exports.getAllQuery = getAllQuery;
 exports.createQuery = createQuery;
 exports.updateQuery = updateQuery;

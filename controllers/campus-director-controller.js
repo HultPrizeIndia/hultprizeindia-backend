@@ -1,4 +1,4 @@
-// const {validationResult} = require('express-validator');
+const {validationResult} = require('express-validator');
 // const bcrypt = require('bcryptjs');
 // const mailer = require('nodemailer');
 // const smtpTransport = require('nodemailer-smtp-transport');
@@ -10,7 +10,6 @@ const authController = require('./authentication-controller');
 const mongoose = require('mongoose');
 
 
-
 const getCampusDirectors = async (req, res, next) => {
     let campusDirectors;
     try {
@@ -19,39 +18,48 @@ const getCampusDirectors = async (req, res, next) => {
         const error = new RequestError('Fetching campus directors failed, please try again later.', 500, err);
         return next(error);
     }
-    await res.json({"status":"success",campusDirectors: campusDirectors.map(campusDirector => campusDirector.toObject({getters: true}))});
+    await res.json({
+        "status": "success",
+        campusDirectors: campusDirectors.map(campusDirector => campusDirector.toObject({getters: true}))
+    });
 };
 
-const getCampusDirectorsByStatus = async (req,res,next) => {
+const getCampusDirectorsByStatus = async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        let params = "";
+        errors.array().forEach((e) => {
+            params += `${e.param}, `
+        });
+        params += "triggered the error!!";
+        return next(
+            new RequestError(params, 422)
+        );
+    }
+
     const {taskId, status} = req.body;
     // const id = mongoose.Types.ObjectId(taskId);
     let campusDirectors = [];
     let temp;
     try {
-        if (status.toLowerCase() == "completed") {
+        if (status.toLowerCase() === "completed") {
 
             temp = await CampusDirector.find({}, '-password');
-            for(i=0;i<temp.length;i++) {
+            for (i = 0; i < temp.length; i++) {
                 if (temp[i]["completedTasks"].includes(taskId)) {
                     campusDirectors.push(temp[i]);
                 }
             }
-            // campusDirectors = await CampusDirector.find({"completedTasks": { $elemMatch: { $eq: id }}}); //Maybe a bug, but this doesnt work (It does in Atlas though)
-            // campusDirectors = await CampusDirector.$where(function () {
-            //     this.completedTasks.includes(taskId);
-            // });
-            // campusDirectors = await CampusDirector.find({"completedTasks" : {"$in" : [taskId]}});
-            
-        } else if (status.toLowerCase() == "started") {
+        } else if (status.toLowerCase() === "started") {
             temp = await CampusDirector.find({}, '-password');
-            for(i=0;i<temp.length;i++) {
+            for (i = 0; i < temp.length; i++) {
                 if (temp[i]["onGoingTasks"].includes(taskId)) {
                     campusDirectors.push(temp[i]);
                 }
             }
-        } else if (status.toLowerCase() == "pending") {
+        } else if (status.toLowerCase() === "pending") {
             temp = await CampusDirector.find({}, '-password');
-            for(i=0;i<temp.length;i++) {
+            for (i = 0; i < temp.length; i++) {
                 if (temp[i]["notStartedTasks"].includes(taskId)) {
                     campusDirectors.push(temp[i]);
                 }
@@ -63,29 +71,43 @@ const getCampusDirectorsByStatus = async (req,res,next) => {
         const error = new RequestError('Fetching campus directors failed, please try again later.', 500, err);
         return next(error);
     }
-    res.json({"status":"success",campusDirectors: campusDirectors.map(campusDirector => campusDirector.toObject({getters: true}))});
+    res.json({
+        "status": "success",
+        campusDirectors: campusDirectors.map(campusDirector => campusDirector.toObject({getters: true}))
+    });
 }
 
 // What if user logins from different locations/browsers?
 
 
 const signUp = async (req, res, next) => {
-    return authController.signUp(req, res,next, CampusDirector);
+    return authController.signUp(req, res, next, CampusDirector);
 }
 
 const login = async (req, res, next) => {
-    return authController.login(req, res,next, CampusDirector);
+    return authController.login(req, res, next, CampusDirector);
 }
 
-const forgotPassword = async (req,res, next) => {
-    return authController.forgotPassword(req,res,next,CampusDirector);
+const forgotPassword = async (req, res, next) => {
+    return authController.forgotPassword(req, res, next, CampusDirector);
 }
 
-const changePassword = async (req,res, next) => {
-    return authController.changePassword(req,res,next,CampusDirector);
+const changePassword = async (req, res, next) => {
+    return authController.changePassword(req, res, next, CampusDirector);
 }
 
 const deleteCD = async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        let params = "";
+        errors.array().forEach((e) => {
+            params += `${e.param}, `
+        });
+        params += "triggered the error!!";
+        return next(
+            new RequestError(params, 422)
+        );
+    }
     const {email} = req.body;
     let campusDirector;
     try {
@@ -94,7 +116,7 @@ const deleteCD = async (req, res, next) => {
         next(new RequestError("Error finding campusDirector by Email", 500, err));
     }
 
-    if(!campusDirector) {
+    if (!campusDirector) {
         next(new RequestError("CampusDirector does not exist!", 500, err));
     }
 

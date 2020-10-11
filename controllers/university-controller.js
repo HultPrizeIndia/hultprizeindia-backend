@@ -37,8 +37,13 @@ const getAllUniversities = async (req, res, next) => {
 const createUniversity = async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+        let params = "";
+        errors.array().forEach((e) => {
+            params += `${e.param}, `
+        });
+        params += "triggered the error!!";
         return next(
-            new RequestError('Invalid Inputs passed', 422, errors)
+            new RequestError(params, 422)
         );
     }
 
@@ -60,8 +65,13 @@ const createUniversity = async (req, res, next) => {
 const updateUniversity = async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+        let params = "";
+        errors.array().forEach((e) => {
+            params += `${e.param}, `
+        });
+        params += "triggered the error!!";
         return next(
-            new RequestError('Invalid Inputs passed', 422, errors)
+            new RequestError(params, 422)
         );
     }
     const universityId = req.params.universityId;

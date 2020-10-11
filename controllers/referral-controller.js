@@ -37,13 +37,18 @@ const getAllReferrals = async (req, res, next) => {
 
 const createReferral = async (req, res, next) => {
     const errors = validationResult(req);
-    const referredBy = req.userData.userId;
     if (!errors.isEmpty()) {
+        let params = "";
+        errors.array().forEach((e) => {
+            params += `${e.param}, `
+        });
+        params += "triggered the error!!";
         return next(
-            new RequestError('Invalid Inputs passed', 422, errors)
+            new RequestError(params, 422)
         );
     }
 
+    const referredBy = req.userData.userId;
     const {name, description, email, mobile,} = req.body;
     const referralDate = Date().toLocaleString();
     const referral = new Referral({
@@ -66,10 +71,16 @@ const createReferral = async (req, res, next) => {
 const updateReferral = async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+        let params = "";
+        errors.array().forEach((e) => {
+            params += `${e.param}, `
+        });
+        params += "triggered the error!!";
         return next(
-            new RequestError('Invalid Inputs passed', 422, errors)
+            new RequestError(params, 422)
         );
     }
+
     const referralId = req.params.referralId;
     const {
         name, description,
