@@ -123,7 +123,7 @@ const deleteReferral = async (req, res, next) => {
         const error = new RequestError('Deleting referral failed, please try again later.', 500, err);
         return next(error);
     }
-    res.json({"status": "Success", "message": "Referral deleted"});
+    res.json({"status": "success", "message": "Referral deleted"});
 };
 
 const deleteAllReferrals = async (req, res, next) => {
@@ -133,7 +133,7 @@ const deleteAllReferrals = async (req, res, next) => {
         const error = new RequestError('Deleting referrals failed, please try again later.', 500, err);
         return next(error);
     }
-    res.json({"status": "Success", "message": "All referrals deleted"});
+    res.json({"status": "success", "message": "All referrals deleted"});
 };
 
 exports.getAllReferrals = getAllReferrals;
