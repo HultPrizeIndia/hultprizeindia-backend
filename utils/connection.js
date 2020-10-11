@@ -1,5 +1,13 @@
 const mongoose = require('mongoose');
 const {MongoMemoryServer} = require('mongodb-memory-server');
+const jwt = require('jsonwebtoken');
+
+const Admin = require('../models/admin');
+const CampusDirector = require('../models/campus-director');
+// const Query = require('../models/query');
+// const Referral = require('../models/referral');
+// const Task = require('../models/task');
+// const University = require('../models/university');
 
 function connect() {
   return new Promise((resolve, reject) => {
@@ -20,6 +28,7 @@ function connect() {
                         return reject(err);
                     }
                     console.log(`Connected to TestDB at ${uri} \nUsing DB: ${dbName}\n\n`);
+                    setupTestDB();
                     resolve();
                 });
             })
@@ -46,6 +55,57 @@ function connect() {
 
 function close() {
   return mongoose.disconnect();
+}
+
+function setupTestDB() {
+    const cd = new CampusDirector({
+        firstName: "test",
+        lastName: "user",
+        email: "test@user.com",
+        // image: {type: String},
+        password: "test123",
+        // university: {type: mongoose.Types.ObjectId, ref: 'University'},
+        mobile: "1234567890",
+        joinDate: Date().toLocaleString()
+    });
+    const admin = new Admin({
+        firstName: "testAdmin",
+        lastName: "user",
+        email: "test@Admin.com",
+        // image: {type: String},
+        password: "test123",
+        // university: {type: mongoose.Types.ObjectId, ref: 'University'},
+        mobile: "1234567890",
+        joinDate: Date().toLocaleString()
+    });
+
+    try {
+         cd.save();
+         admin.save();
+    } catch (err) {
+        throw Error(`Error creating dummy users in TestDB: ${err}`);
+    }
+    let cdToken;
+    let adminToken;
+    try {
+        cdToken = jwt.sign(
+            {userId: cd.id, email: cd.email},
+            process.env.Jwt_Key, {
+                expiresIn: '2d' // expires in 2d
+            }
+        );
+        adminToken = jwt.sign(
+            {userId: admin.id, email: admin.email},
+            process.env.Jwt_Key, {
+                expiresIn: '2d' // expires in 2d
+            }
+        );
+    } catch (err) {
+        throw Error(`Error creating dummy user token in TestDB: ${err}`);
+    }
+    process.env.TEST_ADMIN_TOKEN = adminToken;
+    process.env.TEST_CD_TOKEN = cdToken;
+    console.log("\nCreated dummy testDB data successfully!");
 }
 
 // function dropAll() {
