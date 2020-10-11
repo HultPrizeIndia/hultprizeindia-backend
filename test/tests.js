@@ -1,4 +1,6 @@
+// setting the env variable to handle DB connection
 process.env.NODE_ENV = 'test';
+
 const request = require('supertest');
 const mocha = require('mocha');
 const chai = require('chai');
@@ -8,6 +10,7 @@ const expect = chai.expect
 const connection = require('../utils/connection');
 // const {server} = require('../index');
 const server = require('../index');
+//TODO: add file struct
 
 // afterEach((done) => {
 //     connection.dropAll();
@@ -37,7 +40,7 @@ describe("Test CampusDirector POST Routes", () => {
           if (err) done(err);
           expect(res.status).to.equal(422);
           expect(res.body.status).to.equal("failed");
-          expect(res.body.message).to.equal("Invalid Inputs passed");
+          expect(res.body.message).to.contain('triggered the error!!');
           done();
         });
     });
@@ -75,7 +78,7 @@ describe("Test CampusDirector POST Routes", () => {
           if (err) done(err);
           expect(res.status).to.equal(422);
           expect(res.body.status).to.equal("failed");
-          expect(res.body.message).to.equal("Invalid Inputs passed");
+          expect(res.body.message).to.contain('triggered the error!!');
           done();
         });
     });
@@ -131,6 +134,71 @@ describe("Test CampusDirector GET Routes", () => {
         });
     });
 });
+
+describe("Test Referral GET Routes", () => {
+    it("it should get all referrals", (done) => {
+        request(server)
+            .get("/api/v1/referral/get/all")
+            .end(function (err, res) {
+                if (err) done(err);
+                expect(res.status).to.equal(200);
+                expect(res.body.status).to.equal("success");
+                done();
+            });
+    });
+});
+
+// won't pass as auth token, not provided
+
+// describe("Test Referral POST Routes", () => {
+//     it("Create referral with correct input", (done) => {
+//         request(server)
+//             .post("/api/v1/referral/create")
+//             .send({
+//                 "description": "It a test referral",
+//                 "name": "Test_Verma",
+//                 "email": "shivam@test.com",
+//                 "mobile": "9953798220"
+//             })
+//             .end(function (err, res) {
+//                 if (err) done(err);
+//                 expect(res.status).to.equal(200);
+//                 expect(res.body.status).to.equal("success");
+//                 expect(res.body.referral).to.not.be.undefined;
+//                 done();
+//             });
+//     });
+//
+//     it("Create referral with incorrect input", (done) => {
+//         request(server)
+//             .post("/api/v1/referral/create")
+//             .send({
+//                 "description": "It a test referral",
+//                 // "name": "Test_Verma",
+//                 // "email": "shivam@test.com",
+//                 "mobile": "9953798220"
+//             })
+//             .end(function (err, res) {
+//                 if (err) done(err);
+//                 expect(res.status).to.equal(422);
+//                 expect(res.body.status).to.equal("failed");
+//                 done();
+//             });
+//     });
+// });
+
+// describe("Test Referral DELETE Routes", () => {
+//     it("it should delete all referrals", (done) => {
+//         request(server)
+//             .delete("/api/v1/referral/delete/all")
+//             .end(function (err, res) {
+//                 if (err) done(err);
+//                 expect(res.status).to.equal(200);
+//                 expect(res.body.status).to.equal("success");
+//                 done();
+//             });
+//     });
+// });
 
 
 after((done) => {

@@ -15,7 +15,7 @@ function connect() {
                     useFindAndModify: false
                 }).then((res, err) => {
                     if (err) {
-                        console.log(`Error occured while connecting to database: ${uri}`)
+                        console.log(`Error occurred while connecting to database: ${uri}`)
                         console.log(err);
                         return reject(err);
                     }
