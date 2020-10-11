@@ -1,5 +1,5 @@
 const express = require('express');
-const {check} = require('express-validator');
+const {body} = require('express-validator');
 
 const taskController = require('../controllers/task-controller');
 const checkAuth = require('../middleware/check-auth');
@@ -16,24 +16,24 @@ router.get('/get/admin/:adminId', taskController.getTasksByAdminId);
 // status is 0 by def.
 
 router.post('/create/one/:campusDirectorId', [
-    check('deadline').not().isEmpty(),
-    check('name').not().isEmpty(),
-    check('description').not().isEmpty(),
-    check('priority').not().isEmpty(),
+    body('deadline').not().isEmpty(),
+    body('name').not().isEmpty(),
+    body('description').not().isEmpty(),
+    body('priority').not().isEmpty(),
 ], checkAuth, checkAdmin, taskController.createTaskForOne);
 
 router.post('/create/all', [
-    check('deadline').not().isEmpty(),
-    check('name').not().isEmpty(),
-    check('description').not().isEmpty(),
-    check('priority').not().isEmpty(),
+    body('deadline').not().isEmpty(),
+    body('name').not().isEmpty(),
+    body('description').not().isEmpty(),
+    body('priority').not().isEmpty(),
 ], checkAuth, checkAdmin, taskController.createTaskForAll);
 
 router.patch('/update/:taskId', [
-    check('deadline').not().isEmpty(),
-    check('name').not().isEmpty(),
-    check('description').not().isEmpty(),
-    check('priority').not().isEmpty(),
+    body('deadline').not().isEmpty(),
+    body('name').not().isEmpty(),
+    body('description').not().isEmpty(),
+    body('priority').not().isEmpty(),
 ], checkAuth, checkAdmin, taskController.updateTask);
 
 router.delete('/delete/:taskId', checkAuth, checkAdmin, taskController.deleteTaskById);

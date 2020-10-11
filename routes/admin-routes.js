@@ -1,5 +1,5 @@
 const express = require('express');
-const {check} = require('express-validator');
+const {body} = require('express-validator');
 
 const adminController = require('../controllers/admin-controller');
 const checkAuth = require('../middleware/check-auth');
@@ -15,30 +15,30 @@ router.get('/forgotPassword/:email', adminController.forgotPassword);
 
 
 router.post('/signup', [
-    check('firstName')
+    body('firstName')
         .not()
         .isEmpty(),
-    check('email')
+    body('email')
         .normalizeEmail()
         .isEmail(),
-    check('university').not().isEmpty(),
-    check('password').isLength({min: 6}),
-    check('mobile').not().isEmpty(),
+    body('university').not().isEmpty(),
+    body('password').isLength({min: 6}),
+    body('mobile').not().isEmpty(),
 ], adminController.signUp);
 
 router.post('/login', [
-    check('email')
+    body('email')
         .not()
         .isEmpty(),
-    check('password').isLength({min: 6}),
+    body('password').isLength({min: 6}),
 
 ], adminController.login);
 
 
 router.patch('/changePassword',
     [
-        check('newPassword').isLength({min: 6}),
-        check('currentPassword').isLength({min: 6})
+        body('newPassword').isLength({min: 6}),
+        body('currentPassword').isLength({min: 6})
     ],
     checkAuth,
     adminController.changePassword);

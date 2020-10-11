@@ -1,5 +1,5 @@
 const express = require('express');
-const {check} = require('express-validator');
+const {body} = require('express-validator');
 
 const campusDirectorController = require('../controllers/campus-director-controller');
 const checkAuth = require('../middleware/check-auth');
@@ -12,40 +12,48 @@ router.get('/get/all', campusDirectorController.getCampusDirectors);
 
 router.get('/forgotPassword/:email', campusDirectorController.forgotPassword);
 
-router.post('/get/status', campusDirectorController.getCampusDirectorsByStatus);
-
-router.post('/signup', [
-    check('firstName')
+router.post('/get/status', [
+    body('status')
         .not()
         .isEmpty(),
-    check('email')
+    body('taskId')
         .normalizeEmail()
         .isEmail(),
-    check('university').not().isEmpty(),
-    check('password').isLength({min: 6}),
-    check('mobile').not().isEmpty(),
+], campusDirectorController.getCampusDirectorsByStatus);
+
+router.post('/signup', [
+    body('firstName')
+        .not()
+        .isEmpty(),
+    body('email')
+        .normalizeEmail()
+        .isEmail(),
+    body('university').not().isEmpty(),
+    body('password').isLength({min: 6}),
+    body('mobile').not().isEmpty(),
 ], campusDirectorController.signUp);
 
 
 router.post('/login', [
-    check('email')
+    body('email')
         .not()
         .isEmpty(),
-    check('password').isLength({min: 6}),
+    body('password').isLength({min: 6}),
 ], campusDirectorController.login);
 
 
 router.patch('/changePassword',
     [
-        check('newPassword').isLength({min: 6}),
-        check('currentPassword').isLength({min: 6})
+        body('newPassword').isLength({min: 6}),
+        body('currentPassword').isLength({min: 6})
     ],
     checkAuth,
     campusDirectorController.changePassword);
 
 
-router.post('/delete', checkAuth, checkAdmin, campusDirectorController.deleteCD);
-
+router.post('/delete', [
+    body('email').not().isEmpty
+], checkAuth, checkAdmin, campusDirectorController.deleteCD);
 
 
 // router.get('/:adminId', campusDirectorController.);

@@ -1,5 +1,5 @@
 const express = require('express');
-const { check } = require('express-validator');
+const { body } = require('express-validator');
 
 const queryController = require('../controllers/query-controller');
 const checkAuth = require('../middleware/check-auth');
@@ -11,15 +11,13 @@ router.get('/get/all', queryController.getAllQuery);
 router.get('/get/:queryId', queryController.getQueryyId);
 
 router.post('/create', [
-    check('description').not().isEmpty(),
-    check('title').not().isEmpty()
+    body('description').not().isEmpty(),
+    body('title').not().isEmpty()
 ], checkAuth, queryController.createQuery);
 
-// I think Title and Desc shouldnt be required,
-// cus then the user will HAVE to change them?
 router.patch('/update/:queryId', [
-    check('description').not().isEmpty(),
-    check('title').not().isEmpty()
+    body('description').not().isEmpty(),
+    body('title').not().isEmpty()
 ], checkAuth, queryController.updateQuery);
 
 router.delete('/delete/:queryId', checkAuth, queryController.deleteQuery);

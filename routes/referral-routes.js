@@ -1,5 +1,5 @@
 const express = require('express');
-const {check} = require('express-validator');
+const {body} = require('express-validator');
 
 const referralController = require('../controllers/referral-controller');
 const checkAuth = require('../middleware/check-auth');
@@ -11,17 +11,17 @@ router.get('/get/all', referralController.getAllReferrals);
 router.get('/get/:referralId', referralController.getReferralById);
 
 router.post('/create', [
-    check('description').not().isEmpty(),
-    check('name').not().isEmpty(),
-    check('email').not().isEmpty(),
-    check('mobile').not().isEmpty()
+    body('description').not().isEmpty(),
+    body('name').not().isEmpty(),
+    body('email').not().isEmpty(),
+    body('mobile').not().isEmpty()
 ], checkAuth, referralController.createReferral);
 
 router.patch('/update/:referralId', [
-    check('description').not().isEmpty(),
-    check('name').not().isEmpty(),
-    check('email').not().isEmpty(),
-    check('mobile').not().isEmpty()
+    body('description').not().isEmpty(),
+    body('name').not().isEmpty(),
+    body('email').not().isEmpty(),
+    body('mobile').not().isEmpty()
 ], checkAuth, referralController.updateReferral);
 
 router.delete('/delete/:referralId', checkAuth, checkAdmin, referralController.deleteReferral);
