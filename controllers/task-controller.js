@@ -226,7 +226,6 @@ const deleteTaskById = async (req, res, next) => {
         console.log(taskId);
         const sess = await mongoose.startSession();
         sess.startTransaction();
-        //TODO: ask for help
         let newTasks = [];
         for (const campusDirector of campusDirectors) {
             if (campusDirector.completedTasks.includes(taskId)) {
