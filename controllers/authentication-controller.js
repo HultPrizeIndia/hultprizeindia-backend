@@ -122,7 +122,7 @@ const signUp = async (req, res, next, dbType) => {
     }
 
     // Delete password from local createdUser variable to avoid sending it to the User.
-    createdUserObj = createdUser.toObject();
+    let createdUserObj = createdUser.toObject();
     delete createdUserObj.password;
 
     await res
@@ -214,7 +214,18 @@ const login = async (req, res, next, dbType) => {
 
 //todo: fix nodemailer
 const forgotPassword = async (req, res, next, dbType) => {
-    const email = req.params.email;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        let params = "";
+        errors.array().forEach((e) => {
+            params += `${e.param}, `
+        });
+        params += "triggered the error!!";
+        return next(
+            new RequestError(params, 422)
+        );
+    }
+    const email = req.body.email;
     console.log(email);
     let password = Math.random().toString().substring(0, 3) + Math.random().toString().slice(0, 3) + 'hult';
     let user;

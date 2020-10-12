@@ -45,21 +45,21 @@ const getCampusDirectorsByStatus = async (req, res, next) => {
         if (status.toLowerCase() === "completed") {
 
             temp = await CampusDirector.find({}, '-password');
-            for (i = 0; i < temp.length; i++) {
+            for (let i = 0; i < temp.length; i++) {
                 if (temp[i]["completedTasks"].includes(taskId)) {
                     campusDirectors.push(temp[i]);
                 }
             }
         } else if (status.toLowerCase() === "started") {
             temp = await CampusDirector.find({}, '-password');
-            for (i = 0; i < temp.length; i++) {
+            for (let i = 0; i < temp.length; i++) {
                 if (temp[i]["onGoingTasks"].includes(taskId)) {
                     campusDirectors.push(temp[i]);
                 }
             }
         } else if (status.toLowerCase() === "pending") {
             temp = await CampusDirector.find({}, '-password');
-            for (i = 0; i < temp.length; i++) {
+            for (let i = 0; i < temp.length; i++) {
                 if (temp[i]["notStartedTasks"].includes(taskId)) {
                     campusDirectors.push(temp[i]);
                 }
