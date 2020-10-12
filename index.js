@@ -7,7 +7,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Custom Libraries
-const RequestError = require('./models/request-error');
+const RequestError = require('./middleware/request-error');
 const connection = require('./utils/connection');
 
 // Routes

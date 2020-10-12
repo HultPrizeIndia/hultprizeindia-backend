@@ -4,7 +4,7 @@ const {validationResult} = require('express-validator');
 // const smtpTransport = require('nodemailer-smtp-transport');
 // const jwt = require('jsonwebtoken');
 
-const RequestError = require('../models/request-error');
+const RequestError = require('../middleware/request-error');
 const CampusDirector = require('../models/campus-director');
 const authController = require('./authentication-controller');
 const mongoose = require('mongoose');

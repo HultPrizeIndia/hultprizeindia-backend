@@ -2,7 +2,7 @@ const {validationResult} = require('express-validator');
 
 // const mailer = require('nodemailer');
 
-const RequestError = require('../models/request-error');
+const RequestError = require('../middleware/request-error');
 const CampusDirector = require('../models/campus-director');
 const Task = require('../models/task');
 const mongoose = require('mongoose');
@@ -231,7 +231,7 @@ const deleteTaskById = async (req, res, next) => {
             if (campusDirector.completedTasks.includes(taskId)) {
                 console.log("In Comp");
                 for (const task of campusDirector.completedTasks) {
-                    if (task != taskId)
+                    if (task !== taskId)
                         newTasks.push(task);
                 }
                 campusDirector.completedTasks = newTasks;
@@ -240,7 +240,7 @@ const deleteTaskById = async (req, res, next) => {
             } else if (campusDirector.onGoingTasks.includes(taskId)) {
                 console.log("In on ");
                 for (const task of campusDirector.onGoingTasks) {
-                    if (task != taskId)
+                    if (task !== taskId)
                         newTasks.push(task);
                 }
                 campusDirector.onGoingTask = newTasks;
@@ -249,7 +249,7 @@ const deleteTaskById = async (req, res, next) => {
             } else {
                 console.log("In not");
                 for (const task of campusDirector.notStartedTasks) {
-                    if (task != taskId)
+                    if (task !== taskId)
                         newTasks.push(task);
                 }
                 campusDirector.notStartedTasks = newTasks;

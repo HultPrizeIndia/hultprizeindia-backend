@@ -1,5 +1,5 @@
 const Admin = require('../models/admin');
-const RequestError = require('../models/request-error');
+const RequestError = require('./request-error');
 
 module.exports = async (req, res, next) => {
     const adminId = req.userData.userId;

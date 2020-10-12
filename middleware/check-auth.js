@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const Blacklist = require('../models/blacklist');
-const RequestError = require('../models/request-error');
+const RequestError = require('./request-error');
 
 module.exports = async (req, res, next) => {
   if (req.method === 'OPTIONS') {

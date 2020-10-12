@@ -1,6 +1,6 @@
 
 
-const RequestError = require('../models/request-error');
+const RequestError = require('../middleware/request-error');
 const Admin = require('../models/admin');
 const authController = require('./authentication-controller');
 

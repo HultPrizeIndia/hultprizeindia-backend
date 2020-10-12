@@ -4,7 +4,7 @@ const mailer = require('nodemailer');
 const smtpTransport = require('nodemailer-smtp-transport');
 
 
-const RequestError = require("../models/request-error");
+const RequestError = require("../middleware/request-error");
 
 const validationResult = require("express-validator").validationResult;
 

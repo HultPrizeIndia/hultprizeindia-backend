@@ -1,5 +1,5 @@
 const {validationResult} = require('express-validator');
-const RequestError = require('../models/request-error');
+const RequestError = require('../middleware/request-error');
 const University = require('../models/university');
 
 const getUniversityById = async (req, res, next) => {
