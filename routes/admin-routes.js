@@ -7,11 +7,13 @@ const checkAuth = require('../middleware/check-auth');
 
 const router = new express.Router();
 
-router.get('/', adminController.getAdmins);
+router.get('/get/all', adminController.getAdmins);
 
-router.get('/:adminId', adminController.getAdminById);
+router.get('/get/:adminId', adminController.getAdminById);
 
-router.get('/forgotPassword/:email', adminController.forgotPassword);
+router.post('/forgotPassword', [
+    body('email').not().isEmpty()
+], adminController.forgotPassword);
 
 
 router.post('/signup', [

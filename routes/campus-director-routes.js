@@ -16,9 +16,7 @@ router.post('/get/status', [
     body('status')
         .not()
         .isEmpty(),
-    body('taskId')
-        .normalizeEmail()
-        .isEmail(),
+    body('taskId').not().isEmpty(),
 ], campusDirectorController.getCampusDirectorsByStatus);
 
 router.post('/signup', [
