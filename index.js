@@ -1,6 +1,7 @@
 require('dotenv').config();
 // External Libraries
 const express = require('express');
+const cors = require('cors');
 
 // Inbuilt Libraries
 const fs = require('fs');
@@ -23,16 +24,7 @@ const queryRoutes = require('./routes/query-routes');
 // Setup server:
 const app = express();
 app.use(express.json());
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader(
-        'Access-Control-Allow-Headers',
-        'Origin, X-Requested-With, Content-Type, Accept, Authorization'
-    );
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
-
-    next();
-});
+app.use(cors());
 
 // Handle File upload:
 app.use('/uploads/images', express.static(path.join('uploads', 'images')));
