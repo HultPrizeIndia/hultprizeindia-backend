@@ -160,6 +160,9 @@ tags
 # Persistent undo
 [._]*.un~
 
+### Webstorm ###
+.idea
+
 ### VisualStudioCode ###
 .vscode/*
 !.vscode/settings.json
