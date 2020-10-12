@@ -8,7 +8,7 @@ const RequestError = require("../models/request-error");
 
 const validationResult = require("express-validator").validationResult;
 
-function sendMail(code, email) {
+const sendForgotPasswordMail = (code, email) => {
     let transporter = mailer.createTransport(smtpTransport({
         service: 'gmail',
         host: 'smtp.gmail.com',
@@ -45,10 +45,10 @@ const signUp = async (req, res, next, dbType) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         let params = "";
-         errors.array().forEach((e) => {
+        errors.array().forEach((e) => {
             params += `${e.param}, `
         });
-         params += "triggered the error!!";
+        params += "triggered the error!!";
         return next(
             new RequestError(params, 422)
         );
@@ -235,7 +235,7 @@ const forgotPassword = async (req, res, next, dbType) => {
         return next(error);
     }
     try {
-        await sendMail(password, email);
+        await sendForgotPasswordMail(password, email);
     } catch (err) {
         const error = new RequestError(
             'Error in sending mail!!!',
