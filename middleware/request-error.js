@@ -15,6 +15,10 @@ class RequestError extends Error {
         this.code = errorCode;
 
         // If err is passed, it will be logged on the console
+        // Ignoring the following IF for coverage because it is only 'reached' when there is a server error.
+        // Can be tested if Unit Tests are implemented
+        // but it already does work as the programmer explicitly passes "err"
+        /* istanbul ignore if */
         if (err) {
             console.log("\n")
             const currentdate = new Date(); 

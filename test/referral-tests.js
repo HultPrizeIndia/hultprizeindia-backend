@@ -61,6 +61,43 @@ describe("Referral Routes", () => {
                     done();
                 });
         });
+
+        it("Create referral with incorrect token", (done) => {
+            request(server)
+                .post("/api/v1/referral/create")
+                .set('Authorization', `Bearer THISISAWRONGJWTTOKEN`)
+                .send({
+                    "description": "It a test referral",
+                    "name": "Test_Verma",
+                    "email": "shivam@test.com",
+                    "mobile": "9953798220"
+                })
+                .end((err, res) => {
+                    if (err) done(err);
+                    expect(res.status).to.equal(403);
+                    expect(res.body.status).to.equal("failed");
+                    done();
+                });
+        });
+
+        it("Create referral without token", (done) => {
+            request(server)
+                .post("/api/v1/referral/create")
+                // .set('Authorization', `Bearer ${process.env.TEST_CD_TOKEN}`)
+                .send({
+                    "description": "It a test referral",
+                    "name": "Test_Verma",
+                    "email": "shivam@test.com",
+                    "mobile": "9953798220"
+                })
+                .end((err, res) => {
+                    if (err) done(err);
+                    expect(res.status).to.equal(403);
+                    expect(res.body.status).to.equal("failed");
+                    done();
+                });
+        });
+
     });
     
     describe("Test DELETE Routes", () => {

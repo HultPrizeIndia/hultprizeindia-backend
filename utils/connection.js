@@ -4,7 +4,8 @@ const {setupTestDB} = require('./setup-test-DB');
 
 const connect = () => {
     return new Promise((resolve, reject) => {
-
+        // Ignoring else because it is reached then running in prod/dev
+        /* istanbul ignore else */
         if (process.env.NODE_ENV === 'test') {
             const mongod = new MongoMemoryServer();
             mongod.getUri().then(uri => {
@@ -15,6 +16,7 @@ const connect = () => {
                         useCreateIndex: true,
                         useFindAndModify: false
                     }).then((res, err) => {
+                        /* istanbul ignore if */
                         if (err) {
                             console.log(`Error occurred while connecting to database: ${uri}`)
                             console.log(err);
