@@ -39,7 +39,7 @@ const connect = () => {
                     console.log(err);
                     return reject(err);
                 }
-                console.log(`Connected to DB at ${process.env.DB_URL} \nUsing DB: ${process.env.DB_Name}\n\n`);
+                console.log(`Connected to DB at ${process.env.DB_URL} \nUsing DB: ${process.env.DB_NAME}\n\n`);
                 resolve();
             });
         }

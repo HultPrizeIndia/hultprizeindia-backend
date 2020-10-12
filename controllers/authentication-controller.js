@@ -13,13 +13,13 @@ const sendForgotPasswordMail = (code, email) => {
         service: 'gmail',
         host: 'smtp.gmail.com',
         auth: {
-            user: process.env.Email_Name,
-            pass: process.env.Email_Pass
+            user: process.env.EMAIL_NAME,
+            pass: process.env.EMAIL_PASS
         }
     }));
 
     const mailOptions = {
-        from: process.env.Email_Name,
+        from: process.env.EMAIL_NAME,
         to: email,
         subject: '',
         text: `${code} 
@@ -112,7 +112,7 @@ const signUp = async (req, res, next, dbType) => {
     try {
         token = jwt.sign(
             {userId: createdUser.id, email: createdUser.email},
-            process.env.Jwt_Key, {
+            process.env.JWT_KEY, {
                 expiresIn: '2d' // expires in 2d
             }
         );
@@ -192,7 +192,7 @@ const login = async (req, res, next, dbType) => {
     try {
         token = jwt.sign(
             {userId: existingUser.id, email: existingUser.email,},
-            process.env.Jwt_Key,
+            process.env.JWT_KEY,
         );
     } catch (err) {
         const error = new RequestError(

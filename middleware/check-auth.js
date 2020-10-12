@@ -16,7 +16,7 @@ module.exports = async (req, res, next) => {
     }) != null;
 
     if(!tokenBlacklisted) {
-      const decodedToken = jwt.verify(token, process.env.Jwt_Key);
+      const decodedToken = jwt.verify(token, process.env.JWT_KEY);
       req.userData = { userId: decodedToken.userId };
       next();
       

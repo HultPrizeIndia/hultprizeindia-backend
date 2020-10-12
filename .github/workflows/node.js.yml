@@ -28,7 +28,7 @@ jobs:
       run: npx nyc npm test
       env:
         APP_NAME: Hult Prize India Server
-        Jwt_Key: wubbaLubbaDUBDUB*BURPS*
+        JWT_KEY: wubbaLubbaDUBDUB*BURPS*
         NODE_ENV: dev
     - name: Convert coverage report
       run: npx nyc report --reporter=text-lcov > coverage.lcov

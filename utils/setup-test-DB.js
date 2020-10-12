@@ -36,13 +36,13 @@ const setupTestDB = () => {
     try {
         cdToken = jwt.sign(
             {userId: cd.id, email: cd.email},
-            process.env.Jwt_Key, {
+            process.env.JWT_KEY, {
                 expiresIn: '2d' // expires in 2d
             }
         );
         adminToken = jwt.sign(
             {userId: admin.id, email: admin.email},
-            process.env.Jwt_Key, {
+            process.env.JWT_KEY, {
                 expiresIn: '2d' // expires in 2d
             }
         );
